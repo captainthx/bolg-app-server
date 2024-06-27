@@ -43,7 +43,7 @@ public class ResponseUtil {
     public static ResponseEntity<?> error(ResponseCode code, String message) {
         Result<?> res = Result.builder()
                 .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .code(code.getValue())
+                .code(code.getMapping())
                 .message(message)
                 .build();
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);

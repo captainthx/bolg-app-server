@@ -1,0 +1,7 @@
+package com.yutsuki.serverApi.repository;
+
+import com.yutsuki.serverApi.entity.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PostRepository extends JpaRepository<Post, Long> {
+}

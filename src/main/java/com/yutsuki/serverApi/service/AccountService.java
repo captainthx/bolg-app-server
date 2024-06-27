@@ -1,20 +1,15 @@
 package com.yutsuki.serverApi.service;
 
 import com.yutsuki.serverApi.common.Pagination;
-import com.yutsuki.serverApi.common.ResponseCode;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.exception.AccountException;
 import com.yutsuki.serverApi.exception.BaseException;
-import com.yutsuki.serverApi.jwt.UserDetailsImp;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.repository.AccountRepository;
-import com.yutsuki.serverApi.repository.ConversationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

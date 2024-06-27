@@ -15,15 +15,18 @@ import java.util.List;
 public class Account extends BaseEntity implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String userName;
+
     @ToString.Exclude
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String mobile;
-    @OneToMany(mappedBy = "account")
-    @ToString.Exclude
-    private List<Post> posts;
 
+//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @ToString.Exclude
+//    private List<Post> posts;
 }

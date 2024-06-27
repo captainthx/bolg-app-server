@@ -3,7 +3,6 @@ package com.yutsuki.serverApi.service;
 import com.yutsuki.serverApi.jwt.UserDetailsImp;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.repository.AccountRepository;
-import com.yutsuki.serverApi.repository.ConversationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

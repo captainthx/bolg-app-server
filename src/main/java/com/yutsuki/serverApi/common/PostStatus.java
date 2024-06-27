@@ -5,14 +5,13 @@ import java.util.Optional;
 public enum PostStatus {
     PUBLISH,
     PRIVATE,
-    DRAFT,
     DELETED,
     ;
 
     public static Optional<PostStatus> find(String code) {
-        for (PostStatus valuse : PostStatus.values()) {
-            if (valuse.name().equals(code))
-                return Optional.of(valuse);
+        for (PostStatus value : PostStatus.values()) {
+            if (value.name().equals(code))
+                return Optional.of(value);
         }
         return Optional.empty();
     }

@@ -1,0 +1,19 @@
+package com.yutsuki.serverApi.exception;
+
+public class PostException extends BaseException {
+    public PostException(String message) {
+        super(message);
+    }
+
+    public static PostException invalidPostTitle() {
+        return new PostException("Invalid post title");
+    }
+
+    public static PostException invalidPostContent() {
+        return new PostException("Invalid post content");
+    }
+
+    public static PostException invalidPostStatus() {
+        return new PostException("Invalid post status");
+    }
+}

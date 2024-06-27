@@ -1,11 +1,12 @@
 package com.yutsuki.serverApi.common;
 
+import com.yutsuki.serverApi.util.StateMapping;
 import lombok.Getter;
 
 import java.util.Optional;
 
 @Getter
-public enum ResponseCode {
+public enum ResponseCode implements StateMapping<Integer> {
     SUCCESS(0),
     INVALID_REQUEST(210),
     INVALID_EMAIL(211),
@@ -47,17 +48,17 @@ public enum ResponseCode {
 
     ;
 
-    private final Integer value;
+    private final Integer mapping;
 
     ResponseCode(final Integer code) {
-        this.value = code;
+        this.mapping = code;
     }
 
 
-    public static Optional<ResponseCode> find(Integer code){
-        for (ResponseCode valuse : ResponseCode.values()){
-            if (valuse.value.equals(code))
-                return Optional.of(valuse);
+    public static Optional<ResponseCode> find(Integer code) {
+        for (ResponseCode value : ResponseCode.values()) {
+            if (value.is(code))
+                return Optional.of(value);
         }
         return Optional.empty();
     }
