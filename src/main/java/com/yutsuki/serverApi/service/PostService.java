@@ -3,11 +3,14 @@ package com.yutsuki.serverApi.service;
 import com.yutsuki.serverApi.common.PostStatus;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
+import com.yutsuki.serverApi.entity.Comment;
 import com.yutsuki.serverApi.entity.Post;
 import com.yutsuki.serverApi.exception.AuthException;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
+import com.yutsuki.serverApi.model.response.AccountResponse;
+import com.yutsuki.serverApi.model.response.PostResponse;
 import com.yutsuki.serverApi.repository.CommentRepository;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -56,17 +60,17 @@ public class PostService {
             log.warn("CratePost::(block).invalid account. {}", request);
             throw AuthException.accountNotFound();
         }
-
         PostStatus status = postStatus.get();
         Post entity = new Post();
         entity.setAccount(account);
         entity.setTitle(request.getTitle());
         entity.setContent(request.getContent());
         entity.setStatus(status);
-        log.info("CratePost::(success).create post. {}", entity);
         Post response = postRepository.save(entity);
 
-        return ResponseUtil.success(response);
+        // create response
+        PostResponse responses = build(response, account, response.getComments());
+        return ResponseUtil.success(responses);
     }
 
     public void updatePost() {
@@ -79,5 +83,18 @@ public class PostService {
     }
 
     public void commentPost() {
+    }
+
+    //todo: add response comment list
+    public static PostResponse build(Post post, Account account, List<Comment> comments) {
+        return PostResponse.builder()
+                .id(post.getId())
+                .cdt(post.getCdt())
+                .accountResponse(AccountResponse.build(account))
+                .title(post.getTitle())
+                .content(post.getContent())
+                .status(post.getStatus())
+                .likeCount(post.getLikeCount())
+                .build();
     }
 }
