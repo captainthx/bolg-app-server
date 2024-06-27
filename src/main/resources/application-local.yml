@@ -1,0 +1,32 @@
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog_db?useUnicode=yes&characterEncoding=UTF-8
+    username: dev1
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+jwt:
+  issuer: yotsuki
+  expirationMs: 1h
+  isExpire: 1
+server:
+  whitelist: /v1/auth/**,/ws/**
+  origins: http://localhost:[*]
+
+logging:
+  level:
+    com.yutsuki.serverApi: debug
+    org.springframework.security: debug
