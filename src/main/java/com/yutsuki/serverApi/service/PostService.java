@@ -1,5 +1,6 @@
 package com.yutsuki.serverApi.service;
 
+import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.common.PostStatus;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
@@ -10,16 +11,21 @@ import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
 import com.yutsuki.serverApi.model.response.AccountResponse;
+import com.yutsuki.serverApi.model.response.CommentResponse;
 import com.yutsuki.serverApi.model.response.PostResponse;
 import com.yutsuki.serverApi.repository.CommentRepository;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +33,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class PostService {
+
+
     @Resource
     private SecurityService securityService;
     @Resource
@@ -35,11 +43,24 @@ public class PostService {
     private CommentRepository commentRepository;
     @Resource
     private PostLikeRepository postLikeRepository;
-
-    public void getPostList() {
-
-
+//    @Cacheable(value = "post",key = "#pagination.pageNumber" )
+    public ResponseEntity<?> getPostList(Pagination pagination) {
+        Page<Post> posts = postRepository.findAll(pagination);
+        if (posts.isEmpty()) {
+            return ResponseUtil.success();
+        }
+        List<PostResponse> responses = posts.map(post -> {
+            Account account = post.getAccount();
+            List<Comment> comments = post.getComments();
+            return build(post, Objects.nonNull(account) ? account : null, Objects.nonNull(comments) ? comments : null);
+        }).getContent();
+        return ResponseUtil.successList(posts, responses);
     }
+//    public ResponseEntity<?> getPostListResponse(Pagination pagination) {
+//        List<PostResponse> responses = getPostList(pagination);
+//        Page<Post> posts = postRepository.findAll(pagination);
+//        return ResponseUtil.successList(posts, responses);
+//    }
 
     public ResponseEntity<?> createPost(CreatePostRequest request) throws BaseException {
         if (ObjectUtils.isEmpty(request.getTitle())) {
@@ -73,28 +94,32 @@ public class PostService {
         return ResponseUtil.success(responses);
     }
 
-    public void updatePost() {
+    public ResponseEntity<?> updatePost() {
+        return ResponseUtil.success();
     }
 
-    public void deletePost() {
+    public ResponseEntity<?> deletePost() {
+        return ResponseUtil.success();
     }
 
-    public void likePost() {
+    public ResponseEntity<?> likePost() {
+        return ResponseUtil.success();
     }
 
-    public void commentPost() {
+    public ResponseEntity<?> commentPost() {
+        return ResponseUtil.success();
     }
 
-    //todo: add response comment list
     public static PostResponse build(Post post, Account account, List<Comment> comments) {
         return PostResponse.builder()
                 .id(post.getId())
                 .cdt(post.getCdt())
-                .accountResponse(AccountResponse.build(account))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .status(post.getStatus())
                 .likeCount(post.getLikeCount())
+                .account(AccountResponse.build(account))
+                .comments(Objects.nonNull(comments) ? CommentResponse.build(comments) : null)
                 .build();
     }
 }

@@ -12,5 +12,4 @@ public class PaginationResponse {
     private Integer limit;
     private Integer records;
     private Integer pages;
-
 }

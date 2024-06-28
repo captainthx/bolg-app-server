@@ -47,8 +47,6 @@ public class AccountService {
                 .name(account.getName())
                 .username(account.getUserName())
                 .mobile(account.getMobile())
-                .cdt(account.getCdt())
-                .udt(account.getUdt())
                 .build();
     }
 }

@@ -6,20 +6,16 @@ import com.yutsuki.serverApi.util.JsonUtil;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class AccountResponse {
+public class AccountResponse implements Serializable {
     private long id;
     private String username;
     private String name;
     private String mobile;
-    @JsonSerialize(using = JsonUtil.jsonTimeSerializer.class)
-    private LocalDateTime cdt;
-    @JsonSerialize(using = JsonUtil.jsonTimeSerializer.class)
-    private LocalDateTime udt;
-
 
     public static AccountResponse build(Account account) {
         return AccountResponse.builder()

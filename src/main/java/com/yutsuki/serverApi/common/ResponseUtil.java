@@ -6,9 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class ResponseUtil {
+public class ResponseUtil implements Serializable{
 
     public static ResponseEntity<?> success() {
         return success(null);
@@ -23,7 +24,23 @@ public class ResponseUtil {
         return ResponseEntity.ok(response);
     }
 
-    public static  <T> ResponseEntity<?>successList(Page<T> result) {
+    public static  <T,E> ResponseEntity<?>successList(Page<T> page ,E result) {
+        PaginationResponse paginate = PaginationResponse.builder()
+                .limit(page.getPageable().getPageSize())
+                .current(page.getPageable().getPageNumber() + 1)
+                .records((int) page.getTotalElements())
+                .pages(page.getTotalPages())
+                .build();
+
+        Result<?> response = Result.builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .result(result)
+                .pagination(paginate)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+    public static  <T> ResponseEntity<?>successList(Page<T> result ) {
         PaginationResponse paginate = PaginationResponse.builder()
                 .limit(result.getPageable().getPageSize())
                 .current(result.getPageable().getPageNumber() +1)
@@ -34,7 +51,7 @@ public class ResponseUtil {
         Result<?> response = Result.builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
-                .result(result.getContent())
+                .result(result)
                 .pagination(paginate)
                 .build();
         return ResponseEntity.ok(response);
