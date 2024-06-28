@@ -16,6 +16,7 @@ public class AccountResponse implements Serializable {
     private String username;
     private String name;
     private String mobile;
+    private String avatar;
 
     public static AccountResponse build(Account account) {
         return AccountResponse.builder()

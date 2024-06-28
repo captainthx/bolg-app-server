@@ -13,6 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "account")
 public class Account extends BaseEntity implements Serializable {
+    @Column(columnDefinition = "TEXT")
+    private String avatar;
+
     @Column(unique = true, nullable = false)
     private String name;
 

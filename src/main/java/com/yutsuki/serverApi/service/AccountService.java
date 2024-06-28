@@ -5,12 +5,15 @@ import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.exception.AccountException;
 import com.yutsuki.serverApi.exception.BaseException;
+import com.yutsuki.serverApi.model.request.UpdAvatarRequest;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -29,7 +32,7 @@ public class AccountService {
         if (response.isEmpty()) {
             throw AccountException.accountListEmpty();
         }
-        return ResponseUtil.successList(response.map(this::build));
+        return ResponseUtil.successList(response.map(AccountResponse::build));
     }
 
     public ResponseEntity<?> findById() throws BaseException {
@@ -38,15 +41,19 @@ public class AccountService {
         if (!account.isPresent()) {
             throw AccountException.accountNotFound();
         }
-        return ResponseUtil.success(build(account.get()));
+        return ResponseUtil.success(AccountResponse.build(account.get()));
     }
 
-    private AccountResponse build(Account account) {
-        return AccountResponse.builder()
-                .id(account.getId())
-                .name(account.getName())
-                .username(account.getUserName())
-                .mobile(account.getMobile())
-                .build();
+    public ResponseEntity<?> uploadAvatar(UpdAvatarRequest request) throws BaseException {
+        Account userDetail = securityService.getUserDetail();
+        if (ObjectUtils.isEmpty(request.getAvatarUrl())) {
+            log.warn("AccountService::(block). Avatar url is empty. {}", request);
+            throw AccountException.avatarUrlIsEmpty();
+        }
+        userDetail.setAvatar(request.getAvatarUrl());
+        Account response = accountRepository.save(userDetail);
+        return ResponseUtil.success(AccountResponse.build(response));
     }
+
+
 }
