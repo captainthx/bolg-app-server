@@ -3,6 +3,7 @@ package com.yutsuki.serverApi.controller;
 import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
+import com.yutsuki.serverApi.model.request.QueryPostRequest;
 import com.yutsuki.serverApi.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public ResponseEntity<?> getPostList(Pagination pagination) {
-        return postService.getPostList(pagination);
+    public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
+        return postService.getPostList(pagination,query);
     }
 
 

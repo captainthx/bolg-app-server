@@ -9,7 +9,9 @@ import com.yutsuki.serverApi.entity.Post;
 import com.yutsuki.serverApi.exception.AuthException;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
+import com.yutsuki.serverApi.model.request.CreateCommentPostRequest;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
+import com.yutsuki.serverApi.model.request.QueryPostRequest;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.model.response.CommentResponse;
 import com.yutsuki.serverApi.model.response.PostResponse;
@@ -17,15 +19,14 @@ import com.yutsuki.serverApi.repository.CommentRepository;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,9 +44,23 @@ public class PostService {
     private CommentRepository commentRepository;
     @Resource
     private PostLikeRepository postLikeRepository;
-//    @Cacheable(value = "post",key = "#pagination.pageNumber" )
-    public ResponseEntity<?> getPostList(Pagination pagination) {
-        Page<Post> posts = postRepository.findAll(pagination);
+
+    //    @Cacheable(value = "post",key = "#pagination.pageNumber" )
+    public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
+
+        Post search = new Post();
+        search.setId(query.getId());
+        search.setTitle(query.getTitle());
+        search.setContent(query.getContent());
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("id", ExampleMatcher.GenericPropertyMatchers.exact())
+                .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withMatcher("content", ExampleMatcher.GenericPropertyMatchers.contains());
+        Example<Post> example = Example.of(search, matcher);
+
+        Page<Post> posts = postRepository.findAll(example, pagination);
         if (posts.isEmpty()) {
             return ResponseUtil.success();
         }
@@ -106,9 +121,7 @@ public class PostService {
         return ResponseUtil.success();
     }
 
-    public ResponseEntity<?> commentPost() {
-        return ResponseUtil.success();
-    }
+
 
     public static PostResponse build(Post post, Account account, List<Comment> comments) {
         return PostResponse.builder()
@@ -119,7 +132,7 @@ public class PostService {
                 .status(post.getStatus())
                 .likeCount(post.getLikeCount())
                 .account(AccountResponse.build(account))
-                .comments(Objects.nonNull(comments) ? CommentResponse.build(comments) : null)
+                .comments(Objects.nonNull(comments) ? CommentResponse.buildToList(comments) : null)
                 .build();
     }
 }
