@@ -6,6 +6,7 @@ import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.entity.Comment;
 import com.yutsuki.serverApi.entity.Post;
+import com.yutsuki.serverApi.entity.PostLike;
 import com.yutsuki.serverApi.exception.AuthException;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -117,10 +119,25 @@ public class PostService {
         return ResponseUtil.success();
     }
 
-    public ResponseEntity<?> likePost() {
+    @Transactional(rollbackOn = Exception.class)
+    public ResponseEntity<?> likePost(Long postId) throws BaseException {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (!postOptional.isPresent()) {
+            log.warn("LikePost::(block).post not found. {}", postId);
+            throw PostException.postNotFound();
+        }
+        Post post = postOptional.get();
+        Account account = securityService.getUserDetail();
+        PostLike entity = new PostLike();
+        entity.setPost(post);
+        entity.setAccount(account);
+        postLikeRepository.save(entity);
+
+        // update like count
+        post.setLikeCount(post.getLikeCount() + 1);
+        postRepository.save(post);
         return ResponseUtil.success();
     }
-
 
 
     public static PostResponse build(Post post, Account account, List<Comment> comments) {

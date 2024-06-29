@@ -85,7 +85,7 @@ public class TokenService {
 
     public Long getUserId(String token){
         if (!StringUtils.hasText(token)){
-            log.info("TokenService-[getUserId](token is empty) {}",token);
+            log.warn("TokenService-[getUserId](token is empty) {}",token);
         }
         Jwt decode = decoder.decode(token);
         return decode.getClaim("auth");

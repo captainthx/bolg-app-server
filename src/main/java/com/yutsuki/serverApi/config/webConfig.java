@@ -44,8 +44,6 @@ public class webConfig {
     @Value("${server.origins}")
     private List<String> allowedOrigins;
 
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -53,8 +51,7 @@ public class webConfig {
                 .csrf().disable()
                 .exceptionHandling(e ->
                         e.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                )
+                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {

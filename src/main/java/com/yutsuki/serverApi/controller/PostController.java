@@ -18,12 +18,17 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
-        return postService.getPostList(pagination,query);
+        return postService.getPostList(pagination, query);
     }
 
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody CreatePostRequest request) throws BaseException {
         return postService.createPost(request);
+    }
+
+    @PatchMapping("/likes/{postId}")
+    public ResponseEntity<?> likePost(@PathVariable Long postId) throws BaseException {
+        return postService.likePost(postId);
     }
 }

@@ -28,4 +28,9 @@ public class ErrorAdviser {
         return ResponseUtil.error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+        return ResponseUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+    }
+
 }
