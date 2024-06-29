@@ -29,7 +29,7 @@ build/
 !**/src/test/**/build/
 
 /certs
-application.yml
+application.local.yml
 
 ### VS Code ###
 .vscode/
