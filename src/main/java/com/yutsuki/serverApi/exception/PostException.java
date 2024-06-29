@@ -16,4 +16,12 @@ public class PostException extends BaseException {
     public static PostException invalidPostStatus() {
         return new PostException("Invalid post status");
     }
+
+    public static PostException postNotFound() {
+        return new PostException("Post not found");
+    }
+
+    public static PostException invalidComment() {
+        return new PostException("Invalid comment");
+    }
 }
