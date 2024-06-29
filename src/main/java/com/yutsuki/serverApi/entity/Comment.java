@@ -17,6 +17,6 @@ public class Comment extends BaseEntity implements Serializable {
     @ManyToOne
     private Post post;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT COLLATE utf8mb4_general_ci")
     private String comment;
 }

@@ -21,13 +21,14 @@ public class Post extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT COLLATE utf8mb4_general_ci", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PostStatus status;
 
+    @Column(columnDefinition = "integer default 0")
     private Integer likeCount;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
