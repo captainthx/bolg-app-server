@@ -29,14 +29,13 @@ rsa:
   public-key: classpath:certs/public.pem
 jwt:
   issuer: yotsuki
-  expirationMs: 4h
+  expirationMs: 1h
   isExpire: 1
 server:
-  whitelist: /v1/auth/**,/ws/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs
-  origins: http://localhost:[*]
+  whitelist: /v1/auth/**,/ws/**,/v1/upload/**
+  origins: http://localhost:[*], http://*.your-domain.com:[*]
 storage:
   location: D:\image
 logging:
   level:
     com.yutsuki.serverApi: debug
-    org.springframework.security: debug
