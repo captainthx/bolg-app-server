@@ -24,6 +24,7 @@ public class AccountResponse implements Serializable {
                 .name(account.getName())
                 .username(account.getUserName())
                 .mobile(account.getMobile())
+                .avatar(account.getAvatar())
                 .build();
     }
 }

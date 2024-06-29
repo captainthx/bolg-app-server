@@ -13,7 +13,7 @@ public class AccountException extends BaseException {
         return new AccountException("Account list is empty.");
     }
 
-    public static AccountException avatarUrlIsEmpty() {
-        return new AccountException("Avatar url is empty.");
+    public static AccountException avatarNameIsEmpty() {
+        return new AccountException("Avatar name is empty.");
     }
 }

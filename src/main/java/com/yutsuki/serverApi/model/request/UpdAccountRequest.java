@@ -1,6 +1,5 @@
 package com.yutsuki.serverApi.model.request;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,6 +7,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UpdAvatarRequest {
-    private String avatarUrl;
+public class UpdAccountRequest {
+    private String mobile;
+    private String name;
+    private String avatarName;
 }
