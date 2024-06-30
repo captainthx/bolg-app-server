@@ -1,6 +1,8 @@
 package com.yutsuki.serverApi.exception;
 
 import com.yutsuki.serverApi.common.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ErrorAdviser {
+
+    private static final Logger log = LoggerFactory.getLogger(ErrorAdviser.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
@@ -30,7 +34,7 @@ public class ErrorAdviser {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
-        return ResponseUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return ResponseUtil.error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
     }
 
 }

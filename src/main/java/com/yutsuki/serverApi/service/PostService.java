@@ -49,7 +49,6 @@ public class PostService {
 
     //    @Cacheable(value = "post",key = "#pagination.pageNumber" )
     public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
-
         Post search = new Post();
         search.setId(query.getId());
         search.setTitle(query.getTitle());
@@ -61,7 +60,6 @@ public class PostService {
                 .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("content", ExampleMatcher.GenericPropertyMatchers.contains());
         Example<Post> example = Example.of(search, matcher);
-
         Page<Post> posts = postRepository.findAll(example, pagination);
         if (posts.isEmpty()) {
             return ResponseUtil.success();
@@ -132,7 +130,6 @@ public class PostService {
         entity.setPost(post);
         entity.setAccount(account);
         postLikeRepository.save(entity);
-
         // update like count
         post.setLikeCount(post.getLikeCount() + 1);
         postRepository.save(post);
