@@ -28,8 +28,8 @@ public class Post extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private PostStatus status;
 
-    @Column(columnDefinition = "integer default 0")
-    private Integer likeCount;
+    @Column(columnDefinition = "Bigint default 0")
+    private int likeCount;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @ToString.Exclude
