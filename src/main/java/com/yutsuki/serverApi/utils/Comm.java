@@ -1,4 +1,4 @@
-package com.yutsuki.serverApi.util;
+package com.yutsuki.serverApi.utils;
 
 import org.springframework.http.HttpHeaders;
 
@@ -17,7 +17,6 @@ public class Comm {
         }
         return request.getRemoteAddr();
     }
-
 
 
     public static String getDeviceType(String userAgent) {
@@ -40,4 +39,17 @@ public class Comm {
 
         return deviceType;
     }
+
+
+    public static String randomNumber(int min, int max) {
+        int range = (max - min) + 1;
+        return String.valueOf((int) Math.floor(Math.random() * range) + min);
+    }
+
+
+    public static String randomSetNumber(int length) {
+        return randomNumber((int) Math.pow(10, length - 1), (int) Math.pow(10, length) - 1);
+    }
+
+
 }

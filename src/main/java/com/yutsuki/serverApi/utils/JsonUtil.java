@@ -1,4 +1,4 @@
-package com.yutsuki.serverApi.util;
+package com.yutsuki.serverApi.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,4 +1,4 @@
-package com.yutsuki.serverApi.util;
+package com.yutsuki.serverApi.utils;
 
 @FunctionalInterface
 public interface StateMapping<T extends Comparable<T>> {

@@ -1,4 +1,4 @@
-package com.yutsuki.serverApi.util.model;
+package com.yutsuki.serverApi.utils.model;
 
 import lombok.Data;
 
