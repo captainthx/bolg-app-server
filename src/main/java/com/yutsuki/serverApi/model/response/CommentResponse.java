@@ -2,7 +2,7 @@ package com.yutsuki.serverApi.model.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.entity.Comment;
-import com.yutsuki.serverApi.util.JsonUtil;
+import com.yutsuki.serverApi.utils.JsonUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@Builder
+
 public class CommentResponse implements Serializable {
     private Long id;
     private AccountResponse account;
@@ -28,20 +28,15 @@ public class CommentResponse implements Serializable {
     private LocalDateTime cdt;
 
     public static List<CommentResponse> buildToList(List<Comment> comments) {
-        return comments.stream().map(e -> CommentResponse.builder()
-                .id(e.getId())
-                .account(AccountResponse.build(e.getAccount()))
-                .comment(e.getComment())
-                .cdt(e.getCdt())
-                .build()).collect(Collectors.toList());
+        return comments.stream().map(CommentResponse::build).collect(Collectors.toList());
     }
 
     public static CommentResponse build(Comment comment) {
-        return CommentResponse.builder()
-                .id(comment.getId())
-                .account(AccountResponse.build(comment.getAccount()))
-                .comment(comment.getComment())
-                .cdt(comment.getCdt())
-                .build();
+        CommentResponse response = new CommentResponse();
+        response.setId(comment.getId());
+        response.setComment(comment.getComment());
+       response.setAccount(AccountResponse.build(comment.getAccount()));
+        response.setCdt(comment.getCdt());
+        return response;
     }
 }

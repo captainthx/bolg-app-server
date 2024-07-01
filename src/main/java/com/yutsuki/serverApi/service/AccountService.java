@@ -35,11 +35,12 @@ public class AccountService {
 
     public ResponseEntity<?> findById() throws BaseException {
         Account userDetail = securityService.getUserDetail();
-        Optional<Account> account = this.accountRepository.findById(userDetail.getId());
-        if (!account.isPresent()) {
+        Optional<Account> accountOptional = this.accountRepository.findById(userDetail.getId());
+        if (!accountOptional.isPresent()) {
             throw AccountException.accountNotFound();
         }
-        return ResponseUtil.success(AccountResponse.build(account.get()));
+        Account account = accountOptional.get();
+        return ResponseUtil.success(AccountResponse.build(account));
     }
 
     public ResponseEntity<?> updateAccount(UpdAccountRequest request) throws BaseException {

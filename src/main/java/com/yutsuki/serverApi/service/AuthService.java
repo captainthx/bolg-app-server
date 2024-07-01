@@ -1,6 +1,5 @@
 package com.yutsuki.serverApi.service;
 
-import com.yutsuki.serverApi.common.ResponseCode;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.exception.AuthException;
@@ -11,7 +10,7 @@ import com.yutsuki.serverApi.model.request.AuthLoginRequest;
 import com.yutsuki.serverApi.model.request.AuthRefreshTokenRequest;
 import com.yutsuki.serverApi.model.request.AuthSignupRequest;
 import com.yutsuki.serverApi.repository.AccountRepository;
-import com.yutsuki.serverApi.util.ValidateUtil;
+import com.yutsuki.serverApi.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

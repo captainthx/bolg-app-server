@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,10 +27,14 @@ public class Account extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String mobile;
 
-//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @ToString.Exclude
-//    private List<Post> posts;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Favorite> favorites;
 }

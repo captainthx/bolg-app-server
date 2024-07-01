@@ -1,7 +1,7 @@
 package com.yutsuki.serverApi.common;
 
-import com.yutsuki.serverApi.util.model.PaginationResponse;
-import com.yutsuki.serverApi.util.model.Result;
+import com.yutsuki.serverApi.utils.model.PaginationResponse;
+import com.yutsuki.serverApi.utils.model.Result;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,30 +1,39 @@
 package com.yutsuki.serverApi.model.response;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.entity.Account;
-import com.yutsuki.serverApi.util.JsonUtil;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.springframework.util.ObjectUtils;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Data
-@Builder
+@Getter
+@Setter
+@ToString
 public class AccountResponse implements Serializable {
     private long id;
     private String username;
     private String name;
     private String mobile;
     private String avatar;
+    private List<FavoriteResponse> favorites;
+
 
     public static AccountResponse build(Account account) {
-        return AccountResponse.builder()
-                .id(account.getId())
-                .name(account.getName())
-                .username(account.getUserName())
-                .mobile(account.getMobile())
-                .avatar(account.getAvatar())
-                .build();
+        AccountResponse response = new AccountResponse();
+        response.setId(account.getId());
+        response.setUsername(account.getUserName());
+        response.setName(account.getName());
+        response.setMobile(account.getMobile());
+        response.setAvatar(account.getAvatar());
+        if (!ObjectUtils.isEmpty(account.getFavorites())) {
+            response.setFavorites(FavoriteResponse.buildToList(account.getFavorites()));
+        }
+        return response;
+    }
+
+    public static List<AccountResponse> buildToList(List<Account> accounts) {
+        return accounts.stream().map(AccountResponse::build).collect(Collectors.toList());
     }
 }

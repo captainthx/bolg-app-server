@@ -1,24 +1,20 @@
 package com.yutsuki.serverApi;
 
 import com.github.javafaker.Faker;
-import com.yutsuki.serverApi.common.PostStatus;
-import com.yutsuki.serverApi.common.RedisKey;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.entity.Post;
-import com.yutsuki.serverApi.jwt.Authentication;
-import com.yutsuki.serverApi.jwt.model.TokenResponse;
-import com.yutsuki.serverApi.jwt.model.ValidateBaseToken;
+import com.yutsuki.serverApi.repository.AccountRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.service.HashBaseToken;
 import com.yutsuki.serverApi.service.SecurityService;
 import com.yutsuki.serverApi.service.TokenService;
+import com.yutsuki.serverApi.utils.Comm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +27,7 @@ public class DevRunner implements ApplicationRunner {
     private final TokenService tokenService;
     private final PostRepository postRepository;
     private final SecurityService securityService;
+    private final AccountRepository accountRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -47,16 +44,25 @@ public class DevRunner implements ApplicationRunner {
 //
 //        this.hashBaseToken.validates(validateBaseToken);
         Faker faker = new Faker();
-        Account account = securityService.getUserDetail();
+//        Account account = securityService.getUserDetail();
+
         Set<Post> posts = new HashSet<>();
+        Set<Account> accounts = new HashSet<>();
         for (int i = 0; i < 20; i++) {
-            Post post = new Post();
-            post.setTitle(faker.book().title());
-            post.setContent(faker.lorem().paragraph());
-            post.setStatus(PostStatus.PUBLISH);
-            post.setAccount(account);
-            posts.add(post);
+//            Account account = new Account();
+//            account.setName(faker.name().name());
+//            account.setUserName(faker.name().username());
+//            account.setMobile(faker.phoneNumber().phoneNumber());
+//            account.setPassword("123456");
+//            accounts.add(account);
+//            Post post = new Post();
+//            post.setTitle(faker.book().title());
+//            post.setContent(faker.lorem().paragraph());
+//            post.setStatus(PostStatus.PUBLISH);
+//            post.setAccount(account);
+//            posts.add(post);
         }
+//        accountRepository.saveAll(accounts);
 //        postRepository.saveAll(posts);
     }
 }

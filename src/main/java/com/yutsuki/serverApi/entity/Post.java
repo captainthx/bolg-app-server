@@ -31,7 +31,11 @@ public class Post extends BaseEntity implements Serializable {
     @Column(columnDefinition = "Bigint default 0")
     private int likeCount;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<TagsPost> tags;
 }

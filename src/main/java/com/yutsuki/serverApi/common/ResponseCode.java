@@ -1,6 +1,6 @@
 package com.yutsuki.serverApi.common;
 
-import com.yutsuki.serverApi.util.StateMapping;
+import com.yutsuki.serverApi.utils.StateMapping;
 import lombok.Getter;
 
 import java.util.Optional;
