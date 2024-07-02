@@ -29,7 +29,7 @@ public class PostResponse implements Serializable {
     private PostStatus status;
     private Integer likeCount;
     private List<CommentResponse> comments;
-    private List<TagResponse> tags;
+    private String tags;
 
     public static PostResponse build(Post post) {
         PostResponse response = new PostResponse();
@@ -42,7 +42,7 @@ public class PostResponse implements Serializable {
             response.setComments(CommentResponse.buildToList(post.getComments()));
         }
         if (!ObjectUtils.isEmpty(post.getTags())) {
-            response.setTags(TagResponse.buildToList(post.getTags()));
+            response.setTags(TagResponse.buildToString(post.getTags()));
         }
 
         return response;

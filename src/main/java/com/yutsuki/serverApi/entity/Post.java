@@ -4,6 +4,8 @@ import com.yutsuki.serverApi.common.PostStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "post")
+@DynamicInsert
 public class Post extends BaseEntity implements Serializable {
     @ManyToOne
     private Account account;
@@ -29,7 +32,7 @@ public class Post extends BaseEntity implements Serializable {
     private PostStatus status;
 
     @Column(columnDefinition = "Bigint default 0")
-    private int likeCount;
+    private Integer likeCount;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

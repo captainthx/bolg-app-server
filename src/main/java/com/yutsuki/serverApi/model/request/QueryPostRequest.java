@@ -14,4 +14,5 @@ public class QueryPostRequest {
     private String title;
     private String content;
     private List<String > tags;
+    private String status;
 }

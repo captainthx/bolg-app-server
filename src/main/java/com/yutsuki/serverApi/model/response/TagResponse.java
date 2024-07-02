@@ -27,4 +27,8 @@ public class TagResponse implements Serializable {
     public static List<TagResponse> buildToList(List<TagsPost> tags) {
         return tags.stream().map(TagResponse::build).collect(Collectors.toList());
     }
+
+    public static String buildToString(List<TagsPost> tags) {
+        return tags.stream().map(TagsPost::getName).collect(Collectors.joining(","));
+    }
 }

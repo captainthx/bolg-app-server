@@ -33,8 +33,6 @@ public class PostService {
     @Resource
     private PostRepository postRepository;
     @Resource
-    private CommentRepository commentRepository;
-    @Resource
     private PostLikeRepository postLikeRepository;
     @Resource
     private TagsPostRepository tagsPostRepository;
@@ -45,9 +43,12 @@ public class PostService {
         Specification<Post> spec = Specification.where(PostSpecifications.hasId(query.getId()))
                 .and(PostSpecifications.hasTitle(query.getTitle()))
                 .and(PostSpecifications.hasContent(query.getContent()))
-                .and(PostSpecifications.hasTags(query.getTags()));
+                .and(PostSpecifications.hasTags(query.getTags()))
+                .and(PostSpecifications.hasStatus(query.getStatus()));
 
-      Page<Post> posts = postRepository.findAll(spec, pagination);
+
+
+        Page<Post> posts = postRepository.findAll(spec, pagination);
         if (posts.isEmpty()) {
             return ResponseUtil.success();
         }
