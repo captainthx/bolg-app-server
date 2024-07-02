@@ -36,9 +36,9 @@ public class TokenService {
         Token refreshToken = generateRefreshToken(authentication);
         return TokenResponse.builder()
                 .accessToken(accessToken.getToken())
-                .accessExpire(accessToken.getExpire().toEpochMilli())
+                .accessExpire(accessToken.getExpire().getEpochSecond())
                 .refreshToken(refreshToken.getToken())
-                .refreshExpire(refreshToken.getExpire().toEpochMilli())
+                .refreshExpire(refreshToken.getExpire().getEpochSecond())
                 .build();
     }
 
