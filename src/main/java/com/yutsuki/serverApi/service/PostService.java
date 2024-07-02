@@ -18,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -26,7 +27,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class PostService {
-
 
     @Resource
     private SecurityService securityService;
@@ -39,26 +39,20 @@ public class PostService {
 
 
     public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
-
         Specification<Post> spec = Specification.where(PostSpecifications.hasId(query.getId()))
                 .and(PostSpecifications.hasTitle(query.getTitle()))
                 .and(PostSpecifications.hasContent(query.getContent()))
-                .and(PostSpecifications.hasTags(query.getTags()))
-                .and(PostSpecifications.hasStatus(query.getStatus()));
-
-
-
+                .and(PostSpecifications.hasTags(query.getTags()));
         Page<Post> posts = postRepository.findAll(spec, pagination);
         if (posts.isEmpty()) {
-            return ResponseUtil.success();
+            return ResponseUtil.successEmpty();
         }
         List<PostResponse> responses = PostResponse.buildToList(posts.getContent());
 
         return ResponseUtil.successList(posts, responses);
     }
 
-
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> createPost(CreatePostRequest request) throws BaseException {
         if (ObjectUtils.isEmpty(request.getTitle())) {
             log.warn("CratePost::(block).invalid post title. {}", request);
@@ -97,11 +91,6 @@ public class PostService {
         return ResponseUtil.success(responses);
     }
 
-    public ResponseEntity<?> updatePost() {
-        return ResponseUtil.success();
-    }
-
-
     @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> likePost(Long postId) throws BaseException {
         Optional<Post> postOptional = postRepository.findById(postId);
@@ -120,6 +109,5 @@ public class PostService {
         postRepository.save(post);
         return ResponseUtil.success();
     }
-
 
 }
