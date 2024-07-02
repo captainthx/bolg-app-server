@@ -2,7 +2,9 @@ package com.yutsuki.serverApi.model.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.common.PostStatus;
+import com.yutsuki.serverApi.entity.FavoritePost;
 import com.yutsuki.serverApi.entity.Post;
+import com.yutsuki.serverApi.entity.PostLike;
 import com.yutsuki.serverApi.entity.TagsPost;
 import com.yutsuki.serverApi.utils.JsonUtil;
 import jdk.nashorn.internal.ir.IfNode;
@@ -30,6 +32,7 @@ public class PostResponse implements Serializable {
     private Integer likeCount;
     private List<CommentResponse> comments;
     private String tags;
+    private List<PostLikeResponse> postLikes;
 
     public static PostResponse build(Post post) {
         PostResponse response = new PostResponse();
@@ -38,11 +41,15 @@ public class PostResponse implements Serializable {
         response.setContent(post.getContent());
         response.setCdt(post.getCdt());
         response.setStatus(post.getStatus());
+        response.setLikeCount(post.getLikeCount());
         if (!ObjectUtils.isEmpty(post.getComments())) {
             response.setComments(CommentResponse.buildToList(post.getComments()));
         }
         if (!ObjectUtils.isEmpty(post.getTags())) {
             response.setTags(TagResponse.buildToString(post.getTags()));
+        }
+        if (!ObjectUtils.isEmpty(post.getPostLikes())) {
+            response.setPostLikes(PostLikeResponse.buildToList(post.getPostLikes()));
         }
 
         return response;

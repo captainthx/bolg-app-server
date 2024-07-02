@@ -17,8 +17,6 @@ public class AccountResponse implements Serializable {
     private String name;
     private String mobile;
     private String avatar;
-    private List<FavoriteResponse> favorites;
-
 
     public static AccountResponse build(Account account) {
         AccountResponse response = new AccountResponse();
@@ -27,9 +25,6 @@ public class AccountResponse implements Serializable {
         response.setName(account.getName());
         response.setMobile(account.getMobile());
         response.setAvatar(account.getAvatar());
-        if (!ObjectUtils.isEmpty(account.getFavorites())) {
-            response.setFavorites(FavoriteResponse.buildToList(account.getFavorites()));
-        }
         return response;
     }
 

@@ -1,10 +1,8 @@
 package com.yutsuki.serverApi.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -34,7 +32,4 @@ public class Account extends BaseEntity implements Serializable {
     @ToString.Exclude
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Favorite> favorites;
 }

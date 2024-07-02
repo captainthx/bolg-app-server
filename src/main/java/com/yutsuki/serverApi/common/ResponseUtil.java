@@ -7,12 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 
-public class ResponseUtil implements Serializable{
+public class ResponseUtil implements Serializable {
 
     public static ResponseEntity<?> success() {
         return success(null);
+    }
+
+    public static ResponseEntity<?> successEmpty() {
+        return success(Collections.EMPTY_LIST);
     }
 
     public static <E> ResponseEntity<?> success(E result) {
@@ -24,7 +29,7 @@ public class ResponseUtil implements Serializable{
         return ResponseEntity.ok(response);
     }
 
-    public static  <T,E> ResponseEntity<?>successList(Page<T> page ,E result) {
+    public static <T, E> ResponseEntity<?> successList(Page<T> page, E result) {
         PaginationResponse paginate = PaginationResponse.builder()
                 .limit(page.getPageable().getPageSize())
                 .current(page.getPageable().getPageNumber() + 1)
@@ -40,10 +45,11 @@ public class ResponseUtil implements Serializable{
                 .build();
         return ResponseEntity.ok(response);
     }
-    public static  <T> ResponseEntity<?>successList(Page<T> result ) {
+
+    public static <T> ResponseEntity<?> successList(Page<T> result) {
         PaginationResponse paginate = PaginationResponse.builder()
                 .limit(result.getPageable().getPageSize())
-                .current(result.getPageable().getPageNumber() +1)
+                .current(result.getPageable().getPageNumber() + 1)
                 .records((int) result.getTotalElements())
                 .pages(result.getTotalPages())
                 .build();
@@ -65,7 +71,8 @@ public class ResponseUtil implements Serializable{
                 .build();
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
-    public static ResponseEntity<?> error(Integer code,String message) {
+
+    public static ResponseEntity<?> error(Integer code, String message) {
         Result<?> res = Result.builder()
                 .status(HttpStatus.EXPECTATION_FAILED.getReasonPhrase())
                 .code(code)
@@ -73,6 +80,7 @@ public class ResponseUtil implements Serializable{
                 .build();
         return new ResponseEntity<>(res, HttpStatus.EXPECTATION_FAILED);
     }
+
     public static ResponseEntity<?> error(Integer code, Map<String, String> message) {
         Result<?> res = Result.builder()
                 .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
@@ -97,7 +105,6 @@ public class ResponseUtil implements Serializable{
                 .build();
         return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
     }
-
 
 
 }
