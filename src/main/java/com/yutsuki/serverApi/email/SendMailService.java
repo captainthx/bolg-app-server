@@ -1,5 +1,6 @@
 package com.yutsuki.serverApi.email;
 
+import com.yutsuki.serverApi.common.ApiProperties;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.EmailException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,13 @@ import java.io.IOException;
 
 @Service
 @Slf4j
-public class SedMailService {
+public class SendMailService {
     @Value("${spring.mail.username}")
     private String from;
     @Resource
     private JavaMailSender mailSender;
+    @Resource
+    private ApiProperties apiProperties;
 
     public void send(String to, String subject, String html) {
         MimeMessagePreparator message = mimeMessage -> {
@@ -51,7 +54,7 @@ public class SedMailService {
     }
 
     public String readHtml(String filename) throws IOException {
-        File file = ResourceUtils.getFile("classpath:email/" + filename);
+        File file = ResourceUtils.getFile(apiProperties.getEmailLocation() + filename);
         return FileCopyUtils.copyToString(new FileReader(file));
     }
 

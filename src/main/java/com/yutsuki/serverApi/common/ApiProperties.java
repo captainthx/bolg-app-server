@@ -12,12 +12,14 @@ import java.nio.file.Paths;
 public class ApiProperties {
     @Value("${storage.location}")
     private String uploadLocation;
+    @Value("${storage.email}")
+    private String emailLocation;
 
     public Path getUploadLocation() {
         return Paths.get(uploadLocation);
     }
 
-
-
-
+    public String getEmailLocation() {
+        return emailLocation;
+    }
 }

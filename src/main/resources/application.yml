@@ -45,7 +45,8 @@ server:
   whitelist: /v1/auth/**,/ws/**,/v1/upload/**
   origins: http://localhost:[*], http://*.your-domain.com:[*]
 storage:
-  location: D:\image
+  location: classpath:/work/api/images/
+  email: classpath:/api/
 logging:
   level:
     com.yutsuki.serverApi: debug

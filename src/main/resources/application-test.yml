@@ -46,6 +46,7 @@ server:
   origins: http://localhost:[*]
 storage:
   location: D:\image
+  email:  classpath:email/
 logging:
   level:
     com.yutsuki.serverApi: debug
