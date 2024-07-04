@@ -4,7 +4,7 @@ spring:
   mail:
     host: smtp.gmail.com
     password: lmnlqslgrqmeibxi
-    username: gabtaninw
+    username: gabtaninw@gmail.com
     port: 587
     properties:
       smtp:
@@ -38,15 +38,18 @@ rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
 jwt:
-  issuer: yotsuki
+  issuer: yutsuki
   expirationMs: 4h
   isExpire: 1
 server:
   whitelist: /v1/auth/**,/ws/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs
   origins: http://localhost:[*]
+  resetTokenExpire: 30
 storage:
   location: D:\image
-  email:  classpath:email/
+email:
+  reset-password-form: classpath:email/reset-password.html
+  reset-password-url: http://localhost:3000/reset-password?token=
 logging:
   level:
     com.yutsuki.serverApi: debug

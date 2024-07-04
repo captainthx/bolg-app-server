@@ -68,6 +68,12 @@ public class TokenService {
     }
 
 
+    public String getResetPayload(String token) {
+        Jwt decode = decoder.decode(token);
+        return decode.getClaim("email");
+    }
+
+
     public boolean validates(String token) {
         try {
             decoder.decode(token);
@@ -83,9 +89,9 @@ public class TokenService {
         return decode.getSubject();
     }
 
-    public Long getUserId(String token){
-        if (!StringUtils.hasText(token)){
-            log.warn("TokenService-[getUserId](token is empty) {}",token);
+    public Long getUserId(String token) {
+        if (!StringUtils.hasText(token)) {
+            log.warn("TokenService-[getUserId](token is empty) {}", token);
         }
         Jwt decode = decoder.decode(token);
         return decode.getClaim("auth");

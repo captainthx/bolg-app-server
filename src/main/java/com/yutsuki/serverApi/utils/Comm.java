@@ -51,5 +51,14 @@ public class Comm {
         return randomNumber((int) Math.pow(10, length - 1), (int) Math.pow(10, length) - 1);
     }
 
+    public static String encodeBase64(String str) {
+        return java.util.Base64.getEncoder().encodeToString(str.getBytes());
+    }
+
+    public static String decodeBase64(String str) {
+        byte[] decodedBytes = java.util.Base64.getDecoder().decode(str);
+        return new String(decodedBytes);
+    }
+
 
 }

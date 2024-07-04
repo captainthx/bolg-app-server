@@ -16,4 +16,12 @@ public class AccountException extends BaseException {
     public static AccountException avatarNameIsEmpty() {
         return new AccountException("Avatar name is empty.");
     }
+
+    public static AccountException resetPasswordTokenExpired() {
+        return new AccountException("Reset password token is expired.");
+    }
+
+    public static AccountException resetPasswordTokenInvalid() {
+        return new AccountException("Reset password token is invalid.");
+    }
 }

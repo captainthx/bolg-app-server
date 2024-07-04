@@ -1,10 +1,10 @@
 package com.yutsuki.serverApi.email;
 
-import com.yutsuki.serverApi.common.ApiProperties;
+import com.yutsuki.serverApi.common.EmailProperties;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.EmailException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -20,17 +20,18 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class SendMailService {
-    @Value("${spring.mail.username}")
-    private String from;
+    @Resource
+    private MailProperties mailProperties;
     @Resource
     private JavaMailSender mailSender;
+
     @Resource
-    private ApiProperties apiProperties;
+    private EmailProperties emailProperties;
 
     public void send(String to, String subject, String html) {
         MimeMessagePreparator message = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setFrom(from + "@gmail.com");
+            helper.setFrom(mailProperties.getUsername());
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(html, true);
@@ -38,23 +39,26 @@ public class SendMailService {
         mailSender.send(message);
     }
 
-    // example of a method that sends an email
-    public void sendEmil(String email, String name) throws BaseException {
+    public void sendResetPassword(String email, String link) throws BaseException {
         String html;
         try {
-            html = readHtml("welcome.html");
+            html = readResetEmail();
         } catch (IOException e) {
-            log.error("Email template not found", e);
+            log.error("Email template not found {}", e.getMessage());
             throw EmailException.templateNotFound();
         }
-        String subject = "Welcome to Yutsuki";
-        html = html.replace("{{name}}", name);
-
-        send(email, subject, html);
+        String subject = "Reset password request";
+        html = html.replace("{$link}", link);
+        try {
+            send(email, subject, html);
+        } catch (Exception e) {
+            log.error("Error sending email {}", e.getMessage());
+            throw EmailException.sendFailed(e.getMessage());
+        }
     }
 
-    public String readHtml(String filename) throws IOException {
-        File file = ResourceUtils.getFile(apiProperties.getEmailLocation() + filename);
+    public String readResetEmail() throws IOException {
+        File file = ResourceUtils.getFile(emailProperties.getResetPasswordForm());
         return FileCopyUtils.copyToString(new FileReader(file));
     }
 

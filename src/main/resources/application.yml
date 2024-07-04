@@ -38,15 +38,18 @@ rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
 jwt:
-  issuer: yotsuki
+  issuer: yutsuki
   expirationMs: 1h
   isExpire: 1
 server:
   whitelist: /v1/auth/**,/ws/**,/v1/upload/**
-  origins: http://localhost:[*], http://*.your-domain.com:[*]
+  origins: http://*.your-domain.com:[*]
+  resetTokenExpire: 30
 storage:
   location: classpath:/work/api/images/
-  email: classpath:/api/
+email:
+  reset-password-form: classpath:email/reset-password.html
+  reset-password-url: https://your-domain/reset-password?token=
 logging:
   level:
     com.yutsuki.serverApi: debug
