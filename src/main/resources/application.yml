@@ -12,9 +12,9 @@ spring:
         starttls:
           enable: true
   datasource:
-    url: jdbc:mysql://localhost:3306/blog_db?useUnicode=yes&characterEncoding=UTF-8
-    username: dev1
-    password: root
+    url: jdbc:mysql://103.99.11.176:3306/blog_db?useUnicode=yes&characterEncoding=UTF-8
+    username: root
+    password: 3jhk09fvnDJT2w0n6y084Ma5gQzy2J
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
@@ -25,8 +25,9 @@ spring:
     redis:
       time-to-live: 60000
   redis:
-    host: localhost
+    host: 103.99.11.176
     port: 6379
+    password: X4FDKdvs57ut5GiYtz456U86aDxc6M
   servlet:
     multipart:
       max-file-size: 2MB
@@ -43,13 +44,14 @@ jwt:
   isExpire: 1
 server:
   whitelist: /v1/auth/**,/ws/**,/v1/upload/**
-  origins: http://*.your-domain.com:[*]
+  origins: http://localhost:[*],https://blog.yotsuki.online/
   resetTokenExpire: 30
+  port: 800
 storage:
-  location: classpath:/work/api/images/
+  location: /app/data/images
 email:
-  reset-password-form: classpath:email/reset-password.html
-  reset-password-url: https://your-domain/reset-password?token=
+  reset-password-form: /app/data/reset-password.html
+  reset-password-url: https://blog.yotsuki.online/reset-password?token=
 logging:
   level:
     com.yutsuki.serverApi: debug

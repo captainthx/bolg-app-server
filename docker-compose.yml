@@ -1,19 +1,16 @@
 version: '3.3'
 services:
-  database:
-    image: mysql:5.7
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'blog_db'
-      MYSQL_USER: 'dev1'
-      MYSQL_PASSWORD: 'root'
-      MYSQL_ROOT_PASSWORD: '123456'
+  blog-api:
+    build: .
+    container_name: blog-server
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
+      - '800:800'
     volumes:
-      - localMysqlData:/var/lib/mysql'
+      - ./data:/app/data
+    networks:
+        - my-network
 volumes:
   localMysqlData:
+networks:
+    my-network:
+        external: true
