@@ -38,12 +38,12 @@ public class PostService {
     private TagsPostRepository tagsPostRepository;
 
 
-    public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
+    public ResponseEntity<?> getPostList( QueryPostRequest query) {
         Specification<Post> spec = Specification.where(PostSpecifications.hasId(query.getId()))
                 .and(PostSpecifications.hasTitle(query.getTitle()))
                 .and(PostSpecifications.hasContent(query.getContent()))
                 .and(PostSpecifications.hasTags(query.getTags()));
-        Page<Post> posts = postRepository.findAll(spec, pagination);
+        Page<Post> posts = postRepository.findAll(spec, query);
         if (posts.isEmpty()) {
             return ResponseUtil.successEmpty();
         }

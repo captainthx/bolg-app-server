@@ -31,7 +31,7 @@ public class PostResponse implements Serializable {
     private PostStatus status;
     private Integer likeCount;
     private List<CommentResponse> comments;
-    private String tags;
+    private List<String> tags;
     private List<PostLikeResponse> postLikes;
 
     public static PostResponse build(Post post) {

@@ -17,8 +17,8 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public ResponseEntity<?> getPostList(Pagination pagination, QueryPostRequest query) {
-        return postService.getPostList(pagination, query);
+    public ResponseEntity<?> getPostList(QueryPostRequest query) {
+        return postService.getPostList(query);
     }
 
 
