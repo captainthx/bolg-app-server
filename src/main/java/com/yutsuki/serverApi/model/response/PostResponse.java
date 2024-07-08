@@ -33,6 +33,7 @@ public class PostResponse implements Serializable {
     private List<CommentResponse> comments;
     private List<String> tags;
     private List<PostLikeResponse> postLikes;
+    private AccountResponse author;
 
     public static PostResponse build(Post post) {
         PostResponse response = new PostResponse();
@@ -42,6 +43,7 @@ public class PostResponse implements Serializable {
         response.setCdt(post.getCdt());
         response.setStatus(post.getStatus());
         response.setLikeCount(post.getLikeCount());
+        response.setAuthor(AccountResponse.build(post.getAccount()));
         if (!ObjectUtils.isEmpty(post.getComments())) {
             response.setComments(CommentResponse.buildToList(post.getComments()));
         }

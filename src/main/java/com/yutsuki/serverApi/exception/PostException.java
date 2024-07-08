@@ -24,4 +24,8 @@ public class PostException extends BaseException {
     public static PostException invalidComment() {
         return new PostException("Invalid comment");
     }
+
+    public static PostException invalidPostId() {
+        return new PostException("Invalid post id");
+    }
 }

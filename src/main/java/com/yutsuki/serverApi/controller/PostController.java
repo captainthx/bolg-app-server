@@ -21,6 +21,11 @@ public class PostController {
         return postService.getPostList(query);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable Long id) throws BaseException {
+        return postService.getPostById(id);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody CreatePostRequest request) throws BaseException {

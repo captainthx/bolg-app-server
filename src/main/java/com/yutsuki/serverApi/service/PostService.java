@@ -38,7 +38,7 @@ public class PostService {
     private TagsPostRepository tagsPostRepository;
 
 
-    public ResponseEntity<?> getPostList( QueryPostRequest query) {
+    public ResponseEntity<?> getPostList(QueryPostRequest query) {
         Specification<Post> spec = Specification.where(PostSpecifications.hasId(query.getId()))
                 .and(PostSpecifications.hasTitle(query.getTitle()))
                 .and(PostSpecifications.hasContent(query.getContent()))
@@ -50,6 +50,17 @@ public class PostService {
         List<PostResponse> responses = PostResponse.buildToList(posts.getContent());
 
         return ResponseUtil.successList(posts, responses);
+    }
+
+    public ResponseEntity<?> getPostById(Long id) throws BaseException {
+        Optional<Post> postOptional = postRepository.findById(id);
+        if (!postOptional.isPresent()) {
+            log.warn("GetPostById::(block).post not found. {}", id);
+            throw PostException.postNotFound();
+        }
+        Post post = postOptional.get();
+        PostResponse response = PostResponse.build(post);
+        return ResponseUtil.success(response);
     }
 
     @Transactional(rollbackOn = Exception.class)
