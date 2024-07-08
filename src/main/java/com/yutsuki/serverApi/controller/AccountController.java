@@ -23,7 +23,7 @@ public class AccountController {
         return this.accountService.findAll(pagination);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/profile")
     public ResponseEntity<?> findAccount() throws BaseException {
         return this.accountService.findById();
     }
