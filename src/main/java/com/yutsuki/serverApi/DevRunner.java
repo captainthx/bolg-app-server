@@ -1,25 +1,20 @@
 package com.yutsuki.serverApi;
 
-import com.github.javafaker.Faker;
-import com.yutsuki.serverApi.entity.Account;
-import com.yutsuki.serverApi.entity.Post;
+import com.yutsuki.serverApi.email.SendMailService;
 import com.yutsuki.serverApi.repository.AccountRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.service.HashBaseToken;
+import com.yutsuki.serverApi.service.RedisService;
 import com.yutsuki.serverApi.service.SecurityService;
 import com.yutsuki.serverApi.service.TokenService;
-import com.yutsuki.serverApi.utils.Comm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Slf4j
-//@Component("devRunner")
+@Component("devRunner")
 @AllArgsConstructor
 public class DevRunner implements ApplicationRunner {
 
@@ -28,6 +23,8 @@ public class DevRunner implements ApplicationRunner {
     private final PostRepository postRepository;
     private final SecurityService securityService;
     private final AccountRepository accountRepository;
+    private final SendMailService sendMailService;
+    private final RedisService redisService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -43,26 +40,12 @@ public class DevRunner implements ApplicationRunner {
 //                .build();
 //
 //        this.hashBaseToken.validates(validateBaseToken);
-        Faker faker = new Faker();
-//        Account account = securityService.getUserDetail();
 
-        Set<Post> posts = new HashSet<>();
-        Set<Account> accounts = new HashSet<>();
-        for (int i = 0; i < 20; i++) {
-//            Account account = new Account();
-//            account.setName(faker.name().name());
-//            account.setUserName(faker.name().username());
-//            account.setMobile(faker.phoneNumber().phoneNumber());
-//            account.setPassword("123456");
-//            accounts.add(account);
-//            Post post = new Post();
-//            post.setTitle(faker.book().title());
-//            post.setContent(faker.lorem().paragraph());
-//            post.setStatus(PostStatus.PUBLISH);
-//            post.setAccount(account);
-//            posts.add(post);
-        }
-//        accountRepository.saveAll(accounts);
-//        postRepository.saveAll(posts);
+//        String email = "cappt@yojoies.com";
+//        String link = "https://www.youtube.com/watch?v=2iK3ccCsI6s";
+//        sendMailService.sendResetPassword(email, link);
+//        boolean isKeyExpired = redisService.isExpiredKey("capp");
+//        log.info("isExpired: {}", isKeyExpired);
+
     }
 }
