@@ -42,9 +42,10 @@ jwt:
   expirationMs: 4h
   isExpire: 1
 server:
-  whitelist: /v1/auth/**,/ws/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs
+  whitelist: /v1/auth/**,/v1/forgot-password/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs,/error
   origins: http://localhost:[*]
   resetTokenExpire: 30
+  port: 8080
 storage:
   location: D:\image
 email:
@@ -53,4 +54,11 @@ email:
 logging:
   level:
     com.yutsuki.serverApi: debug
-    org.springframework.security: debug
+    #    org.springframework.security: debug
+    org:
+      springframework:
+        transaction: debug
+
+
+
+
