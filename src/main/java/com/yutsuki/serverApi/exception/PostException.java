@@ -32,4 +32,8 @@ public class PostException extends BaseException {
     public static PostException postLiked() {
         return new PostException("Post already liked");
     }
+
+    public static PostException postAlreadyFavorite() {
+        return new PostException("Post already favorite");
+    }
 }

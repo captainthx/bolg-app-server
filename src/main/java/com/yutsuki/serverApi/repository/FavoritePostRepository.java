@@ -12,4 +12,6 @@ public interface FavoritePostRepository extends JpaRepository<FavoritePost, Long
 
 
     Page<FavoritePost> findByAccount_Id(Long id, Pageable pageable);
+
+    boolean existsByAccount_IdAndPost_Id(Long userId, Long postId);
 }

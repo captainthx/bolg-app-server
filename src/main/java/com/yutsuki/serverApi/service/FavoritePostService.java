@@ -55,6 +55,10 @@ public class FavoritePostService {
         }
         Post post = postOptional.get();
         Account account = securityService.getUserDetail();
+        if (favoritePostRepository.existsByAccount_IdAndPost_Id(account.getId(), post.getId())) {
+            log.warn("FavoritePost::(post already favorite). request: {}", request.getPostId());
+            throw PostException.postAlreadyFavorite();
+        }
         FavoritePost entity = new FavoritePost();
         entity.setPost(post);
         entity.setAccount(account);
