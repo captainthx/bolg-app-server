@@ -46,5 +46,9 @@ public class Post extends BaseEntity implements Serializable {
     @ToString.Exclude
     private List<PostLike> postLikes;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<FavoritePost> favoritePosts;
+
 
 }

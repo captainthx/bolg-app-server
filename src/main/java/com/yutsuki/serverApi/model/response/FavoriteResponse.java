@@ -16,12 +16,11 @@ import java.util.stream.Collectors;
 @Setter
 @ToString
 public class FavoriteResponse implements Serializable {
-    private PostResponse post;
-
+    private AccountResponse account;
 
     public static FavoriteResponse build(FavoritePost favorite) {
         FavoriteResponse response = new FavoriteResponse();
-        response.setPost(PostResponse.build(favorite.getPost()));
+        response.setAccount(AccountResponse.build(favorite.getAccount()));
         return response;
     }
 

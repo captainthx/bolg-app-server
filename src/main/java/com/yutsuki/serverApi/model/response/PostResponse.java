@@ -34,6 +34,7 @@ public class PostResponse implements Serializable {
     private List<String> tags;
     private List<PostLikeResponse> postLikes;
     private AccountResponse author;
+    private List<FavoriteResponse>favoritesPosts;
 
     public static PostResponse build(Post post) {
         PostResponse response = new PostResponse();
@@ -52,6 +53,9 @@ public class PostResponse implements Serializable {
         }
         if (!ObjectUtils.isEmpty(post.getPostLikes())) {
             response.setPostLikes(PostLikeResponse.buildToList(post.getPostLikes()));
+        }
+        if(!ObjectUtils.isEmpty(post.getFavoritePosts())){
+            response.setFavoritesPosts(FavoriteResponse.buildToList(post.getFavoritePosts()));
         }
 
         return response;
