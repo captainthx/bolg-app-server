@@ -109,25 +109,23 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<?> likePost(Long postId) throws BaseException {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        if (!postOptional.isPresent()) {
-            log.warn("LikePost::(block).post not found. {}", postId);
-            throw PostException.postNotFound();
-        }
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> {
+                    log.warn("LikePost::(block).post not found. {}", postId);
+                    return PostException.postNotFound();
+                });
         Account account = securityService.getUserDetail();
         if (postLikeRepository.existsByAccount_IdAndPost_Id(account.getId(), postId)) {
             log.warn("LikePost::(block).post already liked. {}", postId);
             throw PostException.postLiked();
         }
-        Post post = postOptional.get();
         PostLike entity = new PostLike();
         entity.setPost(post);
         entity.setAccount(account);
         postLikeRepository.save(entity);
-        // update like count
+        // ใช้ dirty checking
         post.setLikeCount(post.getLikeCount() + 1);
-        postRepository.save(post);
+        // ไม่จำเป็นต้องเรียก postRepository.save(post) อีก
         return ResponseUtil.success();
     }
-
 }
