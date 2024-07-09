@@ -59,6 +59,7 @@ public class PostService {
             throw PostException.postNotFound();
         }
         Post post = postOptional.get();
+        log.info("post {}", post.getFavoritePosts());
         PostResponse response = PostResponse.build(post);
         return ResponseUtil.success(response);
     }
@@ -109,8 +110,12 @@ public class PostService {
             log.warn("LikePost::(block).post not found. {}", postId);
             throw PostException.postNotFound();
         }
-        Post post = postOptional.get();
         Account account = securityService.getUserDetail();
+        if (postLikeRepository.existsByAccount_IdAndPost_Id(account.getId(), postId)) {
+            log.warn("LikePost::(block).post already liked. {}", postId);
+            throw PostException.postLiked();
+        }
+        Post post = postOptional.get();
         PostLike entity = new PostLike();
         entity.setPost(post);
         entity.setAccount(account);

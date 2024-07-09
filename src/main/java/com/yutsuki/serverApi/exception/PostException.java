@@ -28,4 +28,8 @@ public class PostException extends BaseException {
     public static PostException invalidPostId() {
         return new PostException("Invalid post id");
     }
+
+    public static PostException postLiked() {
+        return new PostException("Post already liked");
+    }
 }
