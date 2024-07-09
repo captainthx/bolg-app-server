@@ -1,28 +1,33 @@
 package com.yutsuki.serverApi.service;
 
-import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.common.PostStatus;
 import com.yutsuki.serverApi.common.ResponseUtil;
-import com.yutsuki.serverApi.entity.*;
+import com.yutsuki.serverApi.entity.Account;
+import com.yutsuki.serverApi.entity.Post;
+import com.yutsuki.serverApi.entity.PostLike;
+import com.yutsuki.serverApi.entity.TagsPost;
 import com.yutsuki.serverApi.exception.AuthException;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
 import com.yutsuki.serverApi.model.request.QueryPostRequest;
 import com.yutsuki.serverApi.model.response.PostResponse;
-import com.yutsuki.serverApi.repository.*;
+import com.yutsuki.serverApi.repository.PostLikeRepository;
+import com.yutsuki.serverApi.repository.PostRepository;
+import com.yutsuki.serverApi.repository.TagsPostRepository;
 import com.yutsuki.serverApi.utils.PostSpecifications;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -63,8 +68,7 @@ public class PostService {
         PostResponse response = PostResponse.build(post);
         return ResponseUtil.success(response);
     }
-
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public ResponseEntity<?> createPost(CreatePostRequest request) throws BaseException {
         if (ObjectUtils.isEmpty(request.getTitle())) {
             log.warn("CratePost::(block).invalid post title. {}", request);
@@ -103,7 +107,7 @@ public class PostService {
         return ResponseUtil.success(responses);
     }
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional
     public ResponseEntity<?> likePost(Long postId) throws BaseException {
         Optional<Post> postOptional = postRepository.findById(postId);
         if (!postOptional.isPresent()) {
