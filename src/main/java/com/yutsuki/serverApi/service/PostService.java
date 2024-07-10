@@ -17,6 +17,8 @@ import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.repository.TagsPostRepository;
 import com.yutsuki.serverApi.utils.PostSpecifications;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +46,17 @@ public class PostService {
 
 
     public ResponseEntity<?> getPostList(QueryPostRequest query) {
-        Specification<Post> spec = Specification.where(PostSpecifications.hasId(query.getId()))
-                .and(PostSpecifications.hasTitle(query.getTitle()))
-                .and(PostSpecifications.hasContent(query.getContent()))
-                .and(PostSpecifications.hasTags(query.getTags()));
-        Page<Post> posts = postRepository.findAll(spec, query);
+        Post search = new Post();
+        search.setTitle(query.getTitle());
+        search.setContent(query.getContent());
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withMatcher("title", ExampleMatcher.GenericPropertyMatcher::contains)
+                .withMatcher("content", ExampleMatcher.GenericPropertyMatcher::contains);
+        Example<Post> example = Example.of(search, matcher);
+        Page<Post> posts = postRepository.findAll(example, query);
         if (posts.isEmpty()) {
             return ResponseUtil.successEmpty();
         }
@@ -64,10 +72,10 @@ public class PostService {
             throw PostException.postNotFound();
         }
         Post post = postOptional.get();
-        log.info("post {}", post.getFavoritePosts());
         PostResponse response = PostResponse.build(post);
         return ResponseUtil.success(response);
     }
+
     @Transactional
     public ResponseEntity<?> createPost(CreatePostRequest request) throws BaseException {
         if (ObjectUtils.isEmpty(request.getTitle())) {
