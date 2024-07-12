@@ -30,16 +30,19 @@ public class CommentService {
 
     public ResponseEntity<?> createComment(CreateCommentPostRequest request) throws BaseException {
         Account account = securityService.getUserDetail();
-        Optional<Post> postOptional = postRepository.findById(request.getPostId());
-        if (!postOptional.isPresent()) {
-            log.warn("CreateComment::(block).post not found. {}", request);
-            throw PostException.postNotFound();
+        Post post = postRepository.findById(request.getPostId())
+                .orElseThrow(() -> {
+                    log.warn("CreateComment::(block).post not found. {}", request);
+                    return PostException.postNotFound();
+                });
+        if (commentRepository.existsByAccountAndPost_Id(account, request.getPostId())) {
+            log.warn("CreateComment::(block).comment already exists. {}", request);
+            throw PostException.commentAlreadyExists();
         }
         if (ObjectUtils.isEmpty(request.getComment())) {
             log.warn("CreateComment::(block).invalid comment. {}", request);
             throw PostException.invalidComment();
         }
-        Post post = postOptional.get();
         Comment entity = new Comment();
         entity.setAccount(account);
         entity.setPost(post);
