@@ -3,10 +3,10 @@ package com.yutsuki.serverApi.model.response;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.entity.Comment;
 import com.yutsuki.serverApi.utils.JsonUtil;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-
+@Slf4j
 public class CommentResponse implements Serializable {
     private Long id;
     private AccountResponse account;
@@ -35,8 +35,9 @@ public class CommentResponse implements Serializable {
         CommentResponse response = new CommentResponse();
         response.setId(comment.getId());
         response.setComment(comment.getComment());
-       response.setAccount(AccountResponse.build(comment.getAccount()));
+        response.setAccount(AccountResponse.build(comment.getAccount()));
         response.setCdt(comment.getCdt());
         return response;
     }
+
 }

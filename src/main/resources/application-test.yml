@@ -50,7 +50,7 @@ storage:
   location: D:\image
 email:
   reset-password-form: classpath:email/reset-password.html
-  reset-password-url: http://localhost:3000/reset-password?token=
+  reset-password-url: http://localhost:3000/reset-password?code=
 logging:
   level:
     com.yutsuki.serverApi: debug

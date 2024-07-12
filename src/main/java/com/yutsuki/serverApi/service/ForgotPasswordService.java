@@ -44,13 +44,13 @@ public class ForgotPasswordService {
             log.warn("ForgotPassword::(block).invalid email. {}", request);
             throw EmailException.invalidEmail();
         }
-        String resetToken = UUID.randomUUID().toString();
+        String code = UUID.randomUUID().toString();
         // save resetToken to redis
         TimeUnit timeUnit = TimeUnit.MINUTES;
 
-        redisService.set(request.getUsername(), resetToken, apiProperties.getResetTokenExpire(), timeUnit);
+        redisService.set(request.getUsername(), code, apiProperties.getResetTokenExpire(), timeUnit);
 
-        String link = emailProperties.getResetPasswordUrl() + resetToken + "&username=" + request.getUsername();
+        String link = emailProperties.getResetPasswordUrl() + code + "&username=" + request.getUsername();
         sendMailService.sendResetPassword(request.getEmail(), link);
         return ResponseUtil.success();
     }
@@ -63,12 +63,12 @@ public class ForgotPasswordService {
         }
         Account account = accountOptional.get();
         if (redisService.isExpiredKey(request.getUsername())) {
-            log.warn("ResetPassword::(block).reset password token expired. {}", request);
+            log.warn("ResetPassword::(block).reset password code expired. {}", request);
             throw AccountException.resetPasswordTokenExpired();
         }
         Object redisObj = redisService.get(request.getUsername());
-        if (!redisObj.equals(request.getToken())) {
-            log.warn("ResetPassword::(block).reset password token invalid. {}", request);
+        if (!redisObj.equals(request.getCode())) {
+            log.warn("ResetPassword::(block).reset password code invalid. {}", request);
             throw AccountException.resetPasswordTokenInvalid();
         }
         account.setPassword(passwordEncoder.encode(request.getPassword()));
