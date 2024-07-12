@@ -6,6 +6,7 @@ import com.yutsuki.serverApi.entity.FavoritePost;
 import com.yutsuki.serverApi.entity.Post;
 import com.yutsuki.serverApi.entity.PostLike;
 import com.yutsuki.serverApi.entity.TagsPost;
+import com.yutsuki.serverApi.utils.Comm;
 import com.yutsuki.serverApi.utils.JsonUtil;
 import jdk.nashorn.internal.ir.IfNode;
 import lombok.*;
@@ -32,9 +33,9 @@ public class PostResponse implements Serializable {
     private Integer likeCount;
     private List<CommentResponse> comments;
     private List<String> tags;
-    private List<PostLikeResponse> postLikes;
+    private List<AccountResponse> postLikes;
     private AccountResponse author;
-    private List<FavoriteResponse>favoritesPosts;
+    private List<AccountResponse>favoritesPosts;
 
     public static PostResponse build(Post post) {
         PostResponse response = new PostResponse();

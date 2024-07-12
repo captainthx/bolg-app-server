@@ -24,8 +24,8 @@ public class FavoriteResponse implements Serializable {
         return response;
     }
 
-    public static List<FavoriteResponse> buildToList(List<FavoritePost> favorites) {
-        return favorites.stream().map(FavoriteResponse::build).collect(Collectors.toList());
+    public static List<AccountResponse> buildToList(List<FavoritePost> favorites) {
+        return favorites.stream().map(e->AccountResponse.build(e.getAccount())).collect(Collectors.toList());
     }
 
 }

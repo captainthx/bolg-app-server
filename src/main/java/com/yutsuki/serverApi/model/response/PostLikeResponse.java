@@ -26,15 +26,20 @@ public class PostLikeResponse implements Serializable {
         return response;
     }
 
-    public static List<PostLikeResponse> buildToList(List<PostLike> postLikes) {
-        Map<Account, List<PostLike>> groupedByAccount = postLikes.stream()
-                .collect(Collectors.groupingBy(PostLike::getAccount));
+//    public static List<PostLikeResponse> buildToList(List<PostLike> postLikes) {
+//        Map<Account, List<PostLike>> groupedByAccount = postLikes.stream()
+//                .collect(Collectors.groupingBy(PostLike::getAccount));
+//
+//        return groupedByAccount.keySet().stream()
+//                .map(likes -> {
+//                    PostLikeResponse response = new PostLikeResponse();
+//                    response.setAccount(AccountResponse.build(likes));
+//                    return response;
+//                }).collect(Collectors.toList());
+//    }
 
-        return groupedByAccount.keySet().stream()
-                .map(likes -> {
-                    PostLikeResponse response = new PostLikeResponse();
-                    response.setAccount(AccountResponse.build(likes));
-                    return response;
-                }).collect(Collectors.toList());
+
+    public static List<AccountResponse> buildToList(List<PostLike> favoritePosts) {
+        return favoritePosts.stream().map(e->AccountResponse.build(e.getAccount())).collect(Collectors.toList());
     }
 }
