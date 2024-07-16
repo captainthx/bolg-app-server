@@ -110,9 +110,7 @@ public class PostService {
             tagsPost.setName(tag);
             tagsPostRepository.save(tagsPost);
         });
-        // create response
-        PostResponse responses = PostResponse.build(response);
-        return ResponseUtil.success(responses);
+        return ResponseUtil.success();
     }
 
     @Transactional
