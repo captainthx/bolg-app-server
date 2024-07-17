@@ -17,6 +17,9 @@ public class ApiProperties {
     @Value("${server.resetTokenExpire}")
     @Getter
     private Long resetTokenExpire;
+    @Value("${storage.compressQuality}")
+    @Getter
+    private Float compressQuality;
 
     public Path getUploadLocation() {
         return Paths.get(uploadLocation);

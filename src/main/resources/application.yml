@@ -49,6 +49,7 @@ server:
   port: 800
 storage:
   location: /app/data/images
+  compressQuality: 0.7
 email:
   reset-password-form: /app/data/reset-password.html
   reset-password-url: https://blog.yotsuki.online/reset-password?token=

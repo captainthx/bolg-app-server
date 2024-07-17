@@ -48,6 +48,7 @@ server:
   port: 8080
 storage:
   location: D:\image
+  compressQuality: 0.7
 email:
   reset-password-form: classpath:email/reset-password.html
   reset-password-url: http://localhost:3000/reset-password?code=
