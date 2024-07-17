@@ -4,6 +4,7 @@ import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.FileUploadException;
 import com.yutsuki.serverApi.jwt.UserDetailsImp;
+import com.yutsuki.serverApi.model.request.UploadFileRequest;
 import com.yutsuki.serverApi.service.SecurityService;
 import com.yutsuki.serverApi.service.StorageService;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,12 @@ public class FileUploadController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws BaseException {
-        return storageService.store(file);
+    public ResponseEntity<?> handleFileUpload(UploadFileRequest request) throws BaseException {
+        return storageService.store(request);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?>deleteFile(@RequestParam String filename) throws BaseException {
+        return storageService.delete(filename);
     }
 }

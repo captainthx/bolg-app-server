@@ -14,4 +14,5 @@ import java.nio.file.Path;
 public class UploadFileResponse {
     private Path urlPath;
     private String imageName;
+    private Long size;
 }
