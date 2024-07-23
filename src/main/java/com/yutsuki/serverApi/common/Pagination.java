@@ -1,9 +1,7 @@
 package com.yutsuki.serverApi.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 
 
 public class Pagination extends PageRequest {

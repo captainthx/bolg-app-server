@@ -15,12 +15,10 @@ import com.yutsuki.serverApi.model.response.PostResponse;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.repository.TagsPostRepository;
-import com.yutsuki.serverApi.utils.PostSpecifications;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,14 +45,13 @@ public class PostService {
 
     public ResponseEntity<?> getPostList(QueryPostRequest query) {
         Post search = new Post();
-        search.setTitle(query.getTitle());
-        search.setContent(query.getContent());
+        search.setTitle(query.getSearch());
+        search.setContent(query.getSearch());
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withMatcher("title", ExampleMatcher.GenericPropertyMatcher::contains)
-                .withMatcher("content", ExampleMatcher.GenericPropertyMatcher::contains);
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
         Example<Post> example = Example.of(search, matcher);
         Page<Post> posts = postRepository.findAll(example, query);
         if (posts.isEmpty()) {
