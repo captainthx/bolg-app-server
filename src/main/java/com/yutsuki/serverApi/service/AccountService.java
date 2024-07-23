@@ -9,6 +9,7 @@ import com.yutsuki.serverApi.model.request.UpdAccountRequest;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,9 +46,10 @@ public class AccountService {
 
     public ResponseEntity<?> updateAccount(UpdAccountRequest request) throws BaseException {
         Account userDetail = securityService.getUserDetail();
-        if (!ObjectUtils.isEmpty(request.getAvatarName())) {
-            userDetail.setAvatar(request.getAvatarName());
+        if (!ObjectUtils.isEmpty(request.getAvatar())) {
+            userDetail.setAvatar(request.getAvatar());
         }
+
         if (!ObjectUtils.isEmpty(request.getName())) {
             userDetail.setName(request.getName());
         }

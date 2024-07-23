@@ -10,5 +10,5 @@ import lombok.ToString;
 public class UpdAccountRequest {
     private String mobile;
     private String name;
-    private String avatarName;
+    private String avatar;
 }

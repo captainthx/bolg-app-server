@@ -28,7 +28,7 @@ public class AccountController {
         return this.accountService.findById();
     }
     @PatchMapping()
-    public ResponseEntity<?>uploadAvatar(@RequestBody UpdAccountRequest request) throws BaseException {
+    public ResponseEntity<?>uploadAccount(@RequestBody UpdAccountRequest request) throws BaseException {
         return this.accountService.updateAccount(request);
     }
 }
