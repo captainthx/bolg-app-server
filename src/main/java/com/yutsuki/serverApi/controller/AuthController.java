@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -23,7 +22,7 @@ public class AuthController {
     @Resource
     private AuthService authService;
 
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public ResponseEntity<?> signup(@RequestBody AuthSignupRequest request) throws BaseException {
         return this.authService.signup(request);
     }
