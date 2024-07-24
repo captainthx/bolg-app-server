@@ -105,6 +105,13 @@ public class ResponseUtil implements Serializable {
                 .build();
         return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
     }
+    public static ResponseEntity<?> forbidden() {
+        Result<?> res = Result.builder()
+                .code(HttpStatus.FORBIDDEN.value())
+                .message(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .build();
+        return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
+    }
 
 
 }

@@ -40,4 +40,16 @@ public class AuthException extends BaseException {
     public static AuthException invalidRefreshToken() {
         return new AuthException("Invalid refresh token!");
     }
+
+    public static AuthException nameAlreadyExist() {
+        return new AuthException("Name already exist!");
+    }
+
+    public static AuthException usernameAlreadyExist() {
+        return new AuthException("Username already exist!");
+    }
+
+    public static AuthException mobileAlreadyExist() {
+        return new AuthException("Mobile already exist!");
+    }
 }

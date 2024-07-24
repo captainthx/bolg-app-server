@@ -6,6 +6,8 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.yutsuki.serverApi.jwt.AuthAccessDenied;
+import com.yutsuki.serverApi.jwt.AuthEntryPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,21 +22,19 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.List;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Configuration
 @EnableWebSecurity
 @Slf4j
-public class webConfig {
+public class webConfig implements WebMvcConfigurer {
     @Value("${rsa.public-key}")
     private RSAPublicKey publicKey;
     @Value("${rsa.private-key}")
@@ -42,22 +42,30 @@ public class webConfig {
     @Value("${server.whitelist}")
     private String[] whitelist;
     @Value("${server.origins}")
-    private List<String> allowedOrigins;
+    private String allowOrigins;
+
+    private final AuthEntryPoint authEntryPoint;
+    private final AuthAccessDenied authAccessDenied;
+
+    public webConfig(AuthEntryPoint authEntryPoint, AuthAccessDenied authAccessDenied) {
+        this.authEntryPoint = authEntryPoint;
+        this.authAccessDenied = authAccessDenied;
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and()
                 .csrf().disable()
-                .exceptionHandling(e ->
-                        e.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+                .authorizeHttpRequests()
+                .antMatchers(whitelist).permitAll()
+                .anyRequest().authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> {
-                    auth.antMatchers(whitelist).permitAll();
-                    auth.anyRequest().authenticated();
-                });
+                .exceptionHandling(e ->
+                        e.authenticationEntryPoint(authEntryPoint)
+                                .accessDeniedHandler(authAccessDenied));
 
         return http.build();
     }
@@ -80,16 +88,12 @@ public class webConfig {
         return new NimbusJwtEncoder(jwks);
     }
 
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.addAllowedHeader(CorsConfiguration.ALL);
-        configuration.addAllowedMethod(CorsConfiguration.ALL);
-        configuration.setAllowedOriginPatterns(allowedOrigins);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(allowOrigins)
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .maxAge(Duration.of(1, ChronoUnit.HOURS).toMinutes());
     }
 }

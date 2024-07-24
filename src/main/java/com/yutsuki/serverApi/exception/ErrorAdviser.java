@@ -1,16 +1,16 @@
 package com.yutsuki.serverApi.exception;
 
-import com.yutsuki.serverApi.common.ResponseUtil;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,17 +24,32 @@ public class ErrorAdviser {
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             msg.put(error.getField(), error.getDefaultMessage());
         });
-        return ResponseUtil.error(HttpStatus.BAD_REQUEST.value(), msg);
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.status = HttpStatus.BAD_REQUEST.value();
+        errorResponse.error = msg.toString();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<?> handleBaseException(BaseException e) {
-        return ResponseUtil.error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.status = HttpStatus.EXPECTATION_FAILED.value();
+        errorResponse.error = e.getMessage();
+        return new ResponseEntity<>(errorResponse, HttpStatus.EXPECTATION_FAILED);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception e) {
-        return ResponseUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+    @ExceptionHandler(JwtValidationException.class)
+    public ResponseEntity<?> handleJwtValidationException(JwtValidationException e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.status = HttpStatus.UNAUTHORIZED.value();
+        errorResponse.error = e.getMessage();
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+    @Data
+    private static class ErrorResponse{
+        private int status;
+        private String error;
+        private LocalDateTime time = LocalDateTime.now();
     }
 
 }

@@ -43,8 +43,8 @@ jwt:
   expirationMs: 1h
   isExpire: 1
 server:
-  whitelist: /v1/auth/**,/ws/**,/v1/upload/**
-  origins: http://localhost:[*],https://blog.yotsuki.online/
+  whitelist: /error,/v1/auth/**,/ws/**,/v1/upload/**,/ping/**
+  origins: https://blog.yotsuki.online
   resetTokenExpire: 30
   port: 800
 storage:
@@ -52,7 +52,7 @@ storage:
   compressQuality: 0.7
 email:
   reset-password-form: /app/data/reset-password.html
-  reset-password-url: https://blog.yotsuki.online/reset-password?token=
+  reset-password-url: https://blog.yotsuki.online/reset-password?code=
 logging:
   level:
     com.yutsuki.serverApi: debug
