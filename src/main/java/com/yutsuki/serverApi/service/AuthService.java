@@ -53,6 +53,20 @@ public class AuthService {
             throw AuthException.invalidPassword();
         }
 
+        if (accountRepository.existsByUserName(request.getUsername())) {
+            log.warn("Signup::(block). Username is already exist. {}", request);
+            throw AuthException.usernameAlreadyExist();
+        }
+
+        if (accountRepository.existsByName(request.getName())) {
+            log.warn("Signup::(block). Name is already exist. {}", request);
+            throw AuthException.nameAlreadyExist();
+        }
+        if (accountRepository.existsByMobile(request.getMobile())) {
+            log.warn("Signup::(block). Mobile is already exist. {}", request);
+            throw AuthException.mobileAlreadyExist();
+        }
+
         Account entity = new Account();
         entity.setName(request.getName());
         entity.setMobile(request.getMobile());

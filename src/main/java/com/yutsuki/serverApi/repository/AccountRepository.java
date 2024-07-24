@@ -17,5 +17,11 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Page<Account>findAll(Pageable pageable);
 
+    Optional<Account> findByName(String name);
 
+    boolean existsByMobile(String mobile);
+
+    boolean existsByName(String name);
+
+    boolean existsByUserName(String userName);
 }
