@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
@@ -41,8 +42,6 @@ public class webConfig implements WebMvcConfigurer {
     private RSAPrivateKey privateKey;
     @Value("${server.whitelist}")
     private String[] whitelist;
-    @Value("${server.origins}")
-    private String allowOrigins;
 
     private final AuthEntryPoint authEntryPoint;
     private final AuthAccessDenied authAccessDenied;
@@ -59,6 +58,7 @@ public class webConfig implements WebMvcConfigurer {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests()
+                .antMatchers(HttpMethod.GET,"/v1/post").permitAll()
                 .antMatchers(whitelist).permitAll()
                 .anyRequest().authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
@@ -91,7 +91,7 @@ public class webConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowOrigins)
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .maxAge(Duration.of(1, ChronoUnit.HOURS).toMinutes());

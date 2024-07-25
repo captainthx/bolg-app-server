@@ -43,7 +43,6 @@ jwt:
   isExpire: 1
 server:
   whitelist: /v1/auth/**,/v1/forgot-password/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs,/error
-  origins: http://localhost:[*]
   resetTokenExpire: 30
   port: 8080
 storage:

@@ -44,7 +44,6 @@ jwt:
   isExpire: 1
 server:
   whitelist: /error,/v1/auth/**,/ws/**,/v1/upload/**,/ping/**
-  origins: https://blog.yotsuki.online
   resetTokenExpire: 30
   port: 800
 storage:
