@@ -41,7 +41,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StorageService {
     private final ApiProperties apiProperties;
-    private final SecurityService securityService;
 
     public ResponseEntity<?> store(UploadFileRequest request) throws BaseException {
         try {
@@ -55,7 +54,7 @@ public class StorageService {
                 throw FileUploadException.fileIsEmpty();
             }
 
-            List<String> supportType = Arrays.asList("image/png", "image/jpeg");
+            List<String> supportType = Arrays.asList("image/png", "image/jpeg","image/webp");
             if (!supportType.contains(contentType)) {
                 log.warn("StorageService::(block). File content type is not support. {}", request.getFile());
                 throw FileUploadException.fileContentTypeIsNotSupport();
@@ -68,9 +67,7 @@ public class StorageService {
             if (!Files.exists(apiProperties.getUploadLocation())) {
                 init();
             }
-            Account account = securityService.getUserDetail();
-
-            String fileName = UUID.randomUUID() + "_" + account.getName() + "." + request.getFile().getContentType().split("/")[1];
+            String fileName = UUID.randomUUID() + "." + request.getFile().getContentType().split("/")[1];
             Path destinationFile = this.apiProperties.getUploadLocation().resolve(
                     fileName).normalize().toAbsolutePath();
             if (!destinationFile.getParent().equals(this.apiProperties.getUploadLocation().toAbsolutePath())) {
@@ -108,10 +105,18 @@ public class StorageService {
     }
 
     private byte[] compressImage(byte[] imageBytes, String contentType) throws IOException {
+        String formatName = contentType.split("/")[1];
+
+        if ("webp".equalsIgnoreCase(formatName)) {
+            // สำหรับ WebP ให้ส่งคืนข้อมูลเดิมโดยไม่บีบอัด
+            log.info("WebP image detected. Skipping compression.");
+            return imageBytes;
+        }
+
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        log.info("Content type: {}", contentType);
 
-        String formatName = contentType.split("/")[1];
         ImageWriter writer = ImageIO.getImageWritersByFormatName(formatName).next();
 
         ImageWriteParam params = writer.getDefaultWriteParam();
@@ -119,6 +124,7 @@ public class StorageService {
             params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             params.setCompressionQuality(apiProperties.getCompressQuality());
         }
+
         try (ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream)) {
             writer.setOutput(ios);
             writer.write(null, new IIOImage(image, null, null), params);

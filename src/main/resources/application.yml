@@ -43,7 +43,7 @@ jwt:
   expirationMs: 1h
   isExpire: 1
 server:
-  whitelist: /error,/v1/auth/**,/ws/**,/v1/upload/**,/ping/**
+  whitelist: /error,/v1/auth/**,/ws/**,/v1/upload/**,/ping/**,/swagger-resources/**,/swagger-ui/**,/v*/api-docs,/v1/upload/**
   resetTokenExpire: 30
   port: 800
 storage:
