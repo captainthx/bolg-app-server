@@ -40,4 +40,8 @@ public class PostException extends BaseException {
     public static PostException commentAlreadyExists() {
         return new PostException("Comment already exists");
     }
+
+    public static PostException invalidPostImage() {
+        return new PostException("Invalid post image");
+    }
 }

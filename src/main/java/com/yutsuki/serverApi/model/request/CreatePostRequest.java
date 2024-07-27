@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @ToString
 public class CreatePostRequest {
+    private String postImage;
     private String title;
     private String content;
     private String status;

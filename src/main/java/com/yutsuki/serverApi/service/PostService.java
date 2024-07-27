@@ -75,6 +75,10 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<?> createPost(CreatePostRequest request) throws BaseException {
+        if (ObjectUtils.isEmpty(request.getPostImage())) {
+            log.warn("CratePost::(block).invalid post image. {}", request);
+            throw PostException.invalidPostImage();
+        }
         if (ObjectUtils.isEmpty(request.getTitle())) {
             log.warn("CratePost::(block).invalid post title. {}", request);
             throw PostException.invalidPostTitle();
@@ -96,6 +100,7 @@ public class PostService {
         PostStatus status = postStatus.get();
         Post entity = new Post();
         entity.setAccount(account);
+        entity.setPostImage(request.getPostImage());
         entity.setTitle(request.getTitle());
         entity.setContent(request.getContent());
         entity.setStatus(status);

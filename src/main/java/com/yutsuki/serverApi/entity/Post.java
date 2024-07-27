@@ -21,6 +21,9 @@ public class Post extends BaseEntity implements Serializable {
     @ManyToOne
     private Account account;
 
+    @Column(columnDefinition = "TEXT")
+    private String postImage;
+
     @Column(nullable = false)
     private String title;
 
