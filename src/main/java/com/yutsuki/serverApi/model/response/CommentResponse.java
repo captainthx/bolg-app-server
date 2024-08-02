@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @ToString
 @Slf4j
 public class CommentResponse implements Serializable {
-    private Long id;
     private AccountResponse account;
     private String comment;
     @JsonSerialize(using = JsonUtil.jsonTimeSerializer.class)
@@ -33,7 +32,6 @@ public class CommentResponse implements Serializable {
 
     public static CommentResponse build(Comment comment) {
         CommentResponse response = new CommentResponse();
-        response.setId(comment.getId());
         response.setComment(comment.getComment());
         response.setAccount(AccountResponse.build(comment.getAccount()));
         response.setCdt(comment.getCdt());

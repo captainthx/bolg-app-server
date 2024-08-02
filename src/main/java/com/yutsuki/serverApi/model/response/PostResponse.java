@@ -2,14 +2,11 @@ package com.yutsuki.serverApi.model.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.common.PostStatus;
-import com.yutsuki.serverApi.entity.FavoritePost;
 import com.yutsuki.serverApi.entity.Post;
-import com.yutsuki.serverApi.entity.PostLike;
-import com.yutsuki.serverApi.entity.TagsPost;
-import com.yutsuki.serverApi.utils.Comm;
 import com.yutsuki.serverApi.utils.JsonUtil;
-import jdk.nashorn.internal.ir.IfNode;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.util.ObjectUtils;
 
 import java.io.Serializable;
@@ -32,7 +29,6 @@ public class PostResponse implements Serializable {
     private PostStatus status;
     private Integer likeCount;
     private String postImage;
-    private List<CommentResponse> comments;
     private List<String> tags;
     private List<AccountResponse> postLikes;
     private AccountResponse author;
@@ -49,9 +45,6 @@ public class PostResponse implements Serializable {
         response.setPostImage(post.getPostImage());
         if (!ObjectUtils.isEmpty(post.getAccount())) {
             response.setAuthor(AccountResponse.build(post.getAccount()));
-        }
-        if (!ObjectUtils.isEmpty(post.getComments())) {
-            response.setComments(CommentResponse.buildToList(post.getComments()));
         }
         if (!ObjectUtils.isEmpty(post.getTags())) {
             response.setTags(TagResponse.buildToString(post.getTags()));

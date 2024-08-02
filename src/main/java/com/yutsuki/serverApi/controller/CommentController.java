@@ -4,10 +4,7 @@ import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.model.request.CreateCommentPostRequest;
 import com.yutsuki.serverApi.service.CommentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -20,5 +17,10 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<?> createComment(@RequestBody CreateCommentPostRequest request) throws BaseException {
         return commentService.createComment(request);
+    }
+
+    @GetMapping
+    public ResponseEntity<?>getCommentByPostId(@RequestParam Long postId) throws BaseException {
+        return commentService.getCommentByPostId(postId);
     }
 }

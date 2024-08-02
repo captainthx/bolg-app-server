@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,5 +50,14 @@ public class CommentService {
         entity.setComment(request.getComment());
         Comment response = commentRepository.save(entity);
         return ResponseUtil.success(CommentResponse.build(response));
+    }
+
+    public ResponseEntity<?> getCommentByPostId(Long postId) throws BaseException {
+        List<Comment> comments = commentRepository.findByPost_Id(postId);
+        if (comments.isEmpty()) {
+            return ResponseUtil.successEmpty();
+        }
+        List<CommentResponse> responses = comments.stream().map(CommentResponse::build).collect(Collectors.toList());
+        return ResponseUtil.success(responses);
     }
 }
