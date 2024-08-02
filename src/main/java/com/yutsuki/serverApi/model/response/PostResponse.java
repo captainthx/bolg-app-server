@@ -31,6 +31,7 @@ public class PostResponse implements Serializable {
     private String content;
     private PostStatus status;
     private Integer likeCount;
+    private String postImage;
     private List<CommentResponse> comments;
     private List<String> tags;
     private List<AccountResponse> postLikes;
@@ -45,6 +46,7 @@ public class PostResponse implements Serializable {
         response.setCdt(post.getCdt());
         response.setStatus(post.getStatus());
         response.setLikeCount(post.getLikeCount());
+        response.setPostImage(post.getPostImage());
         if (!ObjectUtils.isEmpty(post.getAccount())) {
             response.setAuthor(AccountResponse.build(post.getAccount()));
         }
