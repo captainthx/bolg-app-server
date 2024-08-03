@@ -1,5 +1,7 @@
 package com.yutsuki.serverApi.utils;
 
+import org.springframework.util.StringUtils;
+
 import java.util.Objects;
 
 public class ValidateUtil {
@@ -38,14 +40,25 @@ public class ValidateUtil {
     public static boolean invalidPostContent(String content) {
         return Objects.isNull(content) || notRange(content, 1, 4000);
     }
-    public static  boolean invalidPostContentLimit(String content) {
+
+    public static boolean invalidPostContentLimit(String content) {
         return notRange(content, 1, 4000);
     }
 
     public static boolean invalidPostImage(String image) {
         return Objects.isNull(image) || notRange(image, 1, 255);
     }
-    public static boolean invalidPostImageLimit(String image) {
+
+    public static boolean invalidImageLimit(String image) {
         return notRange(image, 1, 255);
     }
+
+    public static boolean invalidMobile(String mobile) {
+        return Objects.isNull(mobile) || notRange(mobile, 1, 10);
+    }
+
+    public static boolean invalidName(String name) {
+        return Objects.isNull(name) || notRange(name, 1, 20);
+    }
+
 }

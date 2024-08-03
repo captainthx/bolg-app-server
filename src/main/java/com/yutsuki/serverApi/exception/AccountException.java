@@ -24,4 +24,17 @@ public class AccountException extends BaseException {
     public static AccountException resetPasswordTokenInvalid() {
         return new AccountException("Reset password token is invalid.");
     }
+
+    public static AccountException invalidAvatar() {
+        return new AccountException("Invalid avatar.");
+    }
+
+    public static AccountException invalidName() {
+        return new AccountException("Invalid name.");
+    }
+
+    public static AccountException invalidMobile() {
+        return new AccountException("Invalid mobile.");
+    }
 }
+

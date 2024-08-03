@@ -8,6 +8,7 @@ import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.model.request.UpdAccountRequest;
 import com.yutsuki.serverApi.model.response.AccountResponse;
 import com.yutsuki.serverApi.repository.AccountRepository;
+import com.yutsuki.serverApi.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.data.domain.Page;
@@ -47,13 +48,26 @@ public class AccountService {
     public ResponseEntity<?> updateAccount(UpdAccountRequest request) throws BaseException {
         Account userDetail = securityService.getUserDetail();
         if (!ObjectUtils.isEmpty(request.getAvatar())) {
+            if (ValidateUtil.invalidImageLimit(request.getAvatar())) {
+                log.warn("UpdateAccount::(block).invalid avatar. {}", request.getAvatar());
+                throw AccountException.invalidAvatar();
+            }
             userDetail.setAvatar(request.getAvatar());
         }
 
         if (!ObjectUtils.isEmpty(request.getName())) {
+            if (ValidateUtil.invalidName(request.getName())) {
+                log.warn("UpdateAccount::(block).invalid name. {}", request.getName());
+                throw AccountException.invalidName();
+            }
             userDetail.setName(request.getName());
         }
+
         if (!ObjectUtils.isEmpty(request.getMobile())) {
+            if (ValidateUtil.invalidMobile(request.getMobile())) {
+                log.warn("UpdateAccount::(block).invalid mobile. {}", request.getMobile());
+                throw AccountException.invalidMobile();
+            }
             userDetail.setMobile(request.getMobile());
         }
         Account response = accountRepository.save(userDetail);

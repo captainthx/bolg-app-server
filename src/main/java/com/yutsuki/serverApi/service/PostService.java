@@ -144,7 +144,7 @@ public class PostService {
             return PostException.postNotFound();
         });
         if (!ObjectUtils.isEmpty(request.getPostImage())) {
-            if (ValidateUtil.invalidPostImageLimit(request.getPostImage())) {
+            if (ValidateUtil.invalidImageLimit(request.getPostImage())) {
                 log.warn("UpdatePost::(block).invalid post image. {}", request);
                 throw PostException.invalidPostImage();
             }
