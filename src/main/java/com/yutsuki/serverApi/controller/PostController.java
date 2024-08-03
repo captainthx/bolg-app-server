@@ -4,6 +4,7 @@ import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
 import com.yutsuki.serverApi.model.request.QueryPostRequest;
+import com.yutsuki.serverApi.model.request.UpdPostRequest;
 import com.yutsuki.serverApi.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +36,10 @@ public class PostController {
     @PatchMapping("/likes/{postId}")
     public ResponseEntity<?> likePost(@PathVariable Long postId) throws BaseException {
         return postService.likePost(postId);
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> updatePost(@RequestBody UpdPostRequest request) throws BaseException {
+        return postService.updatePost(request);
     }
 }

@@ -11,10 +11,12 @@ import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
 import com.yutsuki.serverApi.model.request.CreatePostRequest;
 import com.yutsuki.serverApi.model.request.QueryPostRequest;
+import com.yutsuki.serverApi.model.request.UpdPostRequest;
 import com.yutsuki.serverApi.model.response.PostResponse;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.repository.TagsPostRepository;
+import com.yutsuki.serverApi.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -48,9 +50,7 @@ public class PostService {
         search.setTitle(query.getSearch());
         search.setContent(query.getSearch());
 
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnoreNullValues()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example<Post> example = Example.of(search, matcher);
         Page<Post> posts = postRepository.findAll(example, query);
@@ -117,11 +117,10 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<?> likePost(Long postId) throws BaseException {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> {
-                    log.warn("LikePost::(block).post not found. {}", postId);
-                    return PostException.postNotFound();
-                });
+        Post post = postRepository.findById(postId).orElseThrow(() -> {
+            log.warn("LikePost::(block).post not found. {}", postId);
+            return PostException.postNotFound();
+        });
         Account account = securityService.getUserDetail();
         if (postLikeRepository.existsByAccount_IdAndPost_Id(account.getId(), postId)) {
             log.warn("LikePost::(block).post already liked. {}", postId);
@@ -134,6 +133,51 @@ public class PostService {
         // ใช้ dirty checking
         post.setLikeCount(post.getLikeCount() + 1);
         // ไม่จำเป็นต้องเรียก postRepository.save(post) อีก
+        return ResponseUtil.success();
+    }
+
+
+    public ResponseEntity<?> updatePost(UpdPostRequest request) throws BaseException {
+
+        Post post = postRepository.findById(request.getPostId()).orElseThrow(() -> {
+            log.warn("UpdatePost::(block).post not found. {}", request.getPostId());
+            return PostException.postNotFound();
+        });
+        if (!ObjectUtils.isEmpty(request.getPostImage())) {
+            if (ValidateUtil.invalidPostImageLimit(request.getPostImage())) {
+                log.warn("UpdatePost::(block).invalid post image. {}", request);
+                throw PostException.invalidPostImage();
+            }
+            post.setPostImage(request.getPostImage());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getStatus())) {
+            Optional<PostStatus> postStatusOptional = PostStatus.find(request.getStatus().toUpperCase());
+            if (!postStatusOptional.isPresent()) {
+                log.warn("UpdatePost::(block).invalid post status. {}", request);
+                throw PostException.invalidPostStatus();
+            }
+            PostStatus postStatus = postStatusOptional.get();
+            post.setStatus(postStatus);
+        }
+
+        if (!ObjectUtils.isEmpty(request.getTitle())) {
+            if (ValidateUtil.invalidPostTitleLimit(request.getTitle())) {
+                log.warn("UpdatePost::(block).invalid post title. {}", request);
+                throw PostException.invalidPostTitle();
+            }
+            post.setTitle(request.getTitle());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getContent())) {
+            if (ValidateUtil.invalidPostContentLimit(request.getContent())) {
+                log.warn("UpdatePost::(block).invalid post content. {}", request);
+                throw PostException.invalidPostContent();
+            }
+            post.setContent(request.getContent());
+        }
+
+        postRepository.save(post);
         return ResponseUtil.success();
     }
 }
