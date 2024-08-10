@@ -56,8 +56,11 @@ logging:
     com.yutsuki.serverApi: debug
     #    org.springframework.security: debug
     org:
-      springframework:
-        transaction: debug
+      hibernate:
+        engine:
+          transaction:
+            internal:
+              TransactionImpl: debug
 
 
 

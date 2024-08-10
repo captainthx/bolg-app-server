@@ -4,7 +4,7 @@ import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
 import com.yutsuki.serverApi.entity.FavoritePost;
-import com.yutsuki.serverApi.entity.FavoritePostResponse;
+import com.yutsuki.serverApi.entity.FavoriteResponse;
 import com.yutsuki.serverApi.entity.Post;
 import com.yutsuki.serverApi.exception.BaseException;
 import com.yutsuki.serverApi.exception.PostException;
@@ -38,7 +38,7 @@ public class FavoritePostService {
         if (favoritePosts.isEmpty()) {
             return ResponseUtil.successEmpty();
         }
-        List<FavoritePostResponse> responses = FavoritePostResponse.buildToList(favoritePosts.getContent());
+        List<FavoriteResponse> responses = FavoriteResponse.buildToList(favoritePosts.getContent());
 
         return ResponseUtil.successList(favoritePosts, responses);
     }
