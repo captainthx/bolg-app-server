@@ -8,9 +8,22 @@ services:
     volumes:
       - ./data:/app/data
     networks:
-        - my-network
+      - my-network
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: blog_db
+      MySQL_USER: dev1
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - localMysqlData:/var/lib/mysql
 volumes:
   localMysqlData:
+
 networks:
-    my-network:
-        external: true
+  my-network:
+    external: true
