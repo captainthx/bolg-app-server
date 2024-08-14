@@ -36,15 +36,15 @@ public class AuthService {
 
     public ResponseEntity<?> signup(AuthSignupRequest request) throws BaseException {
 
-        if (Objects.isNull(request.getName())) {
+        if (ValidateUtil.invalidName(request.getName())) {
             log.warn("Signup::(block). Name is null. {}", request);
             throw AuthException.invalidName();
         }
-        if (Objects.isNull(request.getMobile())) {
+        if (ValidateUtil.invalidMobile(request.getMobile())) {
             log.warn("Signup::(block). Mobile is null. {}", request);
             throw AuthException.invalidMobile();
         }
-        if (Objects.isNull(request.getUsername())) {
+        if (ValidateUtil.invalidUsername(request.getUsername())) {
             log.warn("Signup::(block). Username is null. {}", request);
             throw AuthException.invalidUsername();
         }
