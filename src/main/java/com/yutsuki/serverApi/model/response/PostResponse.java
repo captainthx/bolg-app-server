@@ -2,6 +2,7 @@ package com.yutsuki.serverApi.model.response;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yutsuki.serverApi.common.PostStatus;
+import com.yutsuki.serverApi.entity.FavoritePost;
 import com.yutsuki.serverApi.entity.Post;
 import com.yutsuki.serverApi.utils.JsonUtil;
 import lombok.Getter;
@@ -53,7 +54,7 @@ public class PostResponse implements Serializable {
             response.setPostLikes(PostLikeResponse.buildToList(post.getPostLikes()));
         }
         if (!ObjectUtils.isEmpty(post.getFavoritePosts())) {
-            response.setFavoritesPosts(FavoriteResponse.buildToList(post.getFavoritePosts()));
+            response.setFavoritesPosts(AccountResponse.buildToList(post.getFavoritePosts().stream().map(FavoritePost::getAccount).collect(Collectors.toList())));
         }
 
         return response;
