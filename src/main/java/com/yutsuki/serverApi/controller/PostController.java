@@ -18,8 +18,13 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public ResponseEntity<?> getPostList(QueryPostRequest query) {
-        return postService.getPostList(query);
+    public ResponseEntity<?> getPostList(Pagination pagination) {
+        return postService.getPostList(pagination);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPost(QueryPostRequest request) {
+        return postService.searchPost(request);
     }
 
     @GetMapping("/{id}")

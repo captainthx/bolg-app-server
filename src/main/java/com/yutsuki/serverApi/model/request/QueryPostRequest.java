@@ -8,10 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class QueryPostRequest  extends Pagination {
-   private String search;
+public class QueryPostRequest {
+    private String search;
 
-    public QueryPostRequest(Integer page, Integer size, String sort) {
-        super(page, size, sort);
-    }
 }

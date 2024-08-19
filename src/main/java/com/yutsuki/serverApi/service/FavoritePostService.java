@@ -66,7 +66,4 @@ public class FavoritePostService {
         return ResponseUtil.success();
     }
 
-    public ResponseEntity<?> updateFavoritePost() {
-        return ResponseUtil.success();
-    }
 }

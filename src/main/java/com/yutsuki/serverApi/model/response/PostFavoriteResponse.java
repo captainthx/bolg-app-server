@@ -18,12 +18,15 @@ public class PostFavoriteResponse implements Serializable {
     private Long id;
     private String title;
     private String content;
+    private String postImage;
 
-    public static PostFavoriteResponse build(Post post){
+
+    public static PostFavoriteResponse build(Post post) {
         PostFavoriteResponse response = new PostFavoriteResponse();
         response.setId(post.getId());
         response.setTitle(post.getTitle());
         response.setContent(post.getContent());
+        response.setPostImage(post.getPostImage());
         return response;
     }
 }

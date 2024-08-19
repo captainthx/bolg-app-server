@@ -1,5 +1,6 @@
 package com.yutsuki.serverApi.service;
 
+import com.yutsuki.serverApi.common.Pagination;
 import com.yutsuki.serverApi.common.PostStatus;
 import com.yutsuki.serverApi.common.ResponseUtil;
 import com.yutsuki.serverApi.entity.Account;
@@ -13,6 +14,7 @@ import com.yutsuki.serverApi.model.request.CreatePostRequest;
 import com.yutsuki.serverApi.model.request.QueryPostRequest;
 import com.yutsuki.serverApi.model.request.UpdPostRequest;
 import com.yutsuki.serverApi.model.response.PostResponse;
+import com.yutsuki.serverApi.model.response.SearchPostResponse;
 import com.yutsuki.serverApi.repository.PostLikeRepository;
 import com.yutsuki.serverApi.repository.PostRepository;
 import com.yutsuki.serverApi.repository.TagsPostRepository;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -45,7 +48,17 @@ public class PostService {
     private TagsPostRepository tagsPostRepository;
 
 
-    public ResponseEntity<?> getPostList(QueryPostRequest query) {
+    public ResponseEntity<?> getPostList(Pagination pagination) {
+        Page<Post> posts = postRepository.findAll(pagination);
+        if (posts.isEmpty()) {
+            return ResponseUtil.successEmpty();
+        }
+        List<PostResponse> responses = PostResponse.buildToList(posts.getContent());
+
+        return ResponseUtil.successList(posts, responses);
+    }
+
+    public ResponseEntity<?> searchPost(QueryPostRequest query) {
         Post search = new Post();
         search.setTitle(query.getSearch());
         search.setContent(query.getSearch());
@@ -53,13 +66,13 @@ public class PostService {
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example<Post> example = Example.of(search, matcher);
-        Page<Post> posts = postRepository.findAll(example, query);
+        List<Post> posts = postRepository.findAll(example, Sort.by(Sort.Direction.DESC, "cdt"));
         if (posts.isEmpty()) {
             return ResponseUtil.successEmpty();
         }
-        List<PostResponse> responses = PostResponse.buildToList(posts.getContent());
+        List<SearchPostResponse> responses = SearchPostResponse.buildToList(posts);
 
-        return ResponseUtil.successList(posts, responses);
+        return ResponseUtil.successList(responses);
     }
 
     public ResponseEntity<?> getPostById(Long id) throws BaseException {

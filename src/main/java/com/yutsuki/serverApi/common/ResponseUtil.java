@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class ResponseUtil implements Serializable {
@@ -59,6 +60,14 @@ public class ResponseUtil implements Serializable {
                 .message("success")
                 .result(result)
                 .pagination(paginate)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+    public static <T> ResponseEntity<?> successList(List<T> result) {
+        Result<?> response = Result.builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .result(result)
                 .build();
         return ResponseEntity.ok(response);
     }
