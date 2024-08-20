@@ -63,7 +63,10 @@ public class PostService {
         search.setTitle(query.getSearch());
         search.setContent(query.getSearch());
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        ExampleMatcher matcher = ExampleMatcher.matchingAny()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example<Post> example = Example.of(search, matcher);
         List<Post> posts = postRepository.findAll(example, Sort.by(Sort.Direction.DESC, "cdt"));
