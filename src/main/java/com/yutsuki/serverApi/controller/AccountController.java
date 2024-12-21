@@ -18,10 +18,6 @@ public class AccountController {
     private AccountService accountService;
 
 
-    @GetMapping("/all")
-    public ResponseEntity<?> findAllAccount(Pagination pagination) throws BaseException {
-        return this.accountService.findAll(pagination);
-    }
 
     @GetMapping("/profile")
     public ResponseEntity<?> findAccount() throws BaseException {

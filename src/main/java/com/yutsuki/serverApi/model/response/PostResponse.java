@@ -33,9 +33,10 @@ public class PostResponse implements Serializable {
     private List<String> tags;
     private List<AccountResponse> postLikes;
     private AccountResponse author;
-    private List<AccountResponse> favoritesPosts;
+    private boolean isFavorite;
+    private boolean isLike;
 
-    public static PostResponse build(Post post) {
+    public static PostResponse build(Post post, boolean isFavorite, boolean isLike) {
         PostResponse response = new PostResponse();
         response.setId(post.getId());
         response.setTitle(post.getTitle());
@@ -53,15 +54,12 @@ public class PostResponse implements Serializable {
         if (!ObjectUtils.isEmpty(post.getPostLikes())) {
             response.setPostLikes(PostLikeResponse.buildToList(post.getPostLikes()));
         }
-        if (!ObjectUtils.isEmpty(post.getFavoritePosts())) {
-            response.setFavoritesPosts(AccountResponse.buildToList(post.getFavoritePosts().stream().map(FavoritePost::getAccount).collect(Collectors.toList())));
-        }
-
+        response.setFavorite(isFavorite);
+        response.setLike(isLike);
         return response;
     }
 
-    public static List<PostResponse> buildToList(List<Post> posts) {
-        return posts.stream().map(PostResponse::build).collect(Collectors.toList());
-
+    public static List<PostResponse> buildToList(List<Post> posts, boolean isFavorite, boolean isLike) {
+        return posts.stream().map(post -> PostResponse.build(post, isFavorite, isLike)).collect(Collectors.toList());
     }
 }

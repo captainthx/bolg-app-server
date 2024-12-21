@@ -27,13 +27,6 @@ public class AccountService {
     @Resource
     private SecurityService securityService;
 
-    public ResponseEntity<?> findAll(Pagination pagination) throws AccountException {
-        Page<Account> response = this.accountRepository.findAll(pagination);
-        if (response.isEmpty()) {
-            throw AccountException.accountListEmpty();
-        }
-        return ResponseUtil.successList(response.map(AccountResponse::build));
-    }
 
     public ResponseEntity<?> findById() throws BaseException {
         Account userDetail = securityService.getUserDetail();

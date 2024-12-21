@@ -53,7 +53,7 @@ public class PostService {
         if (posts.isEmpty()) {
             return ResponseUtil.successEmpty();
         }
-        List<PostResponse> responses = PostResponse.buildToList(posts.getContent());
+        List<PostResponse> responses = PostResponse.buildToList(posts.getContent(), false, false);
 
         return ResponseUtil.successList(posts, responses);
     }
@@ -79,13 +79,19 @@ public class PostService {
     }
 
     public ResponseEntity<?> getPostById(Long id) throws BaseException {
+        Account user = securityService.getUserDetail();
         Optional<Post> postOptional = postRepository.findById(id);
         if (!postOptional.isPresent()) {
             log.warn("GetPostById::(block).post not found. {}", id);
             throw PostException.postNotFound();
         }
         Post post = postOptional.get();
-        PostResponse response = PostResponse.build(post);
+        boolean isFavorite = post.getFavoritePosts().stream().anyMatch(favoritePost -> favoritePost.getAccount().getId().equals(user.getId()));
+        boolean isLike = post.getPostLikes().stream().anyMatch(postLike -> postLike.getAccount().getId().equals(user.getId()));
+
+        PostResponse response = PostResponse.build(post,isFavorite,isLike);
+
+        log.info("response: {}", response);
         return ResponseUtil.success(response);
     }
 
