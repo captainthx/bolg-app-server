@@ -11,8 +11,8 @@
     <groupId>com.yutsuki</groupId>
     <artifactId>blog-app-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>chat-app-server</name>
-    <description>chat-app-server</description>
+    <name>blog-app-server</name>
+    <description>blog-app-server</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
